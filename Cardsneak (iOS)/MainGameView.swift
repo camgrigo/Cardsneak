@@ -14,22 +14,28 @@ struct MainGameView: View {
     @State private var isShowingMenu = false
     
     var body: some View {
-        Text("Hello, World!")
-            .toolbar {
-                Button(action: {
-                    isShowingMenu = true
-                }, label: {
-                    Text("Menu")
-                })
-                .actionSheet(isPresented: $isShowingMenu, content: {
-                    ActionSheet(title: Text("Menu"), buttons: [
-                        .destructive(Text("End Game")) {
-                            gameModel.endGame()
-                        },
-                        .cancel(Text("Close"))
-                    ])
-                })
-            }
+        NavigationView {
+            LazyVGrid(columns: [GridItem(), GridItem()], content: {
+                ForEach(gameModel.playerCarousel.contents) {
+                    PlayerView(player: $0)
+                }
+            })
+                .toolbar {
+                    ToolbarItem {
+                        Button("Menu") {
+                            isShowingMenu = true
+                        }
+                    }
+                }
+        }
+        .actionSheet(isPresented: $isShowingMenu, content: {
+            ActionSheet(title: Text("Menu"), buttons: [
+                .destructive(Text("End Game")) {
+                    gameModel.endGame()
+                },
+                .cancel(Text("Close"))
+            ])
+        })
     }
     
 }

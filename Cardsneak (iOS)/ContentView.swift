@@ -43,7 +43,7 @@ struct StylizedTextField: View {
             .padding()
             .foregroundColor(.blue)
             .font(Font.system(.title3, design: .rounded).bold())
-            .background(Color.white.cornerRadius(20))
+            .background(Color(.systemBackground).cornerRadius(20))
     }
 }
 

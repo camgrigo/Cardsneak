@@ -52,7 +52,7 @@ class GameModel: ObservableObject {
     func startGame(player: Player) {
         isInProgress = true
         
-        print("\nWelcome, \(player.name). This is Cardsneak.")
+//        print("\nWelcome, \(player.name). This is Cardsneak.")
         
         mainPlayer = player
         
