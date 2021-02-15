@@ -13,20 +13,38 @@ struct MainGameView: View {
     
     @State private var isShowingMenu = false
     
+    private var menuButton: some View {
+        Button("Menu") {
+            isShowingMenu = true
+        }
+    }
+    
     var body: some View {
         NavigationView {
-            LazyVGrid(columns: [GridItem(), GridItem()], content: {
-                ForEach(gameModel.playerCarousel.contents) {
-                    PlayerView(player: $0)
-                }
-            })
-                .toolbar {
-                    ToolbarItem {
-                        Button("Menu") {
-                            isShowingMenu = true
-                        }
+            VStack {
+                VStack {
+                    HStack {
+                        
+                            CardStackView(cards: gameModel.playerCarousel.contents[1].cards)
+                            Spacer()
+                            CardStackView(cards: gameModel.playerCarousel.contents[2].cards)
+                    }
+                    HStack {
+                        Spacer()
+                        CardStackView(cards: gameModel.stack)
+                        Spacer()
+                    }
+                    HStack {
+                        CardStackView(cards: gameModel.playerCarousel.contents[3].cards)
+                        Spacer()
+                        CardStackView(cards: gameModel.playerCarousel.contents[4].cards)
                     }
                 }
+                PlayerView(player: gameModel.mainPlayer!)
+            }
+            .toolbar {
+                ToolbarItem { menuButton }
+            }
         }
         .actionSheet(isPresented: $isShowingMenu, content: {
             ActionSheet(title: Text("Menu"), buttons: [

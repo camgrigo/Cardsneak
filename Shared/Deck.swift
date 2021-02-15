@@ -12,21 +12,11 @@ struct Deck {
     var cards = [PlayingCard]()
     
     
-    func shuffle() -> Deck {
+    func shuffled() -> Deck {
         var cards = self.cards
         (0..<3).forEach { _ in cards.shuffle() }
         
-        return self
-    }
-    
-    func deal(to characters: [Player]) {
-        var cards = self.cards
-        var characters = Carousel(characters)
-        
-        while !cards.isEmpty {
-            let card = cards.popLast()!
-            characters.next().cards.append(card)
-        }
+        return Deck(cards: cards)
     }
     
     

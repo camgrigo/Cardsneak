@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct PlayingCard: Equatable, Hashable, Identifiable {
     var id: String { "\(suit)\(rank)" }
@@ -29,6 +30,15 @@ extension PlayingCard {
                 return "♣️"
             case .heart:
                 return "♥️"
+            }
+        }
+        
+        var color: Color {
+            switch self {
+            case .spade, .club:
+                return .primary
+            case .diamond, .heart:
+                return .red
             }
         }
     }

@@ -80,6 +80,7 @@ struct ContentView: View {
         }
         .fullScreenCover(isPresented: $gameModel.isInProgress, content: {
             MainGameView()
+                .environmentObject(gameModel)
         })
     }
 }

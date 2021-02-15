@@ -12,15 +12,18 @@ struct PlayerView: View {
     var player: Player
     
     var body: some View {
-        Text(player.name)
-            .padding()
-            .background(Color(.secondarySystemBackground).cornerRadius(15))
-            .padding()
-        HStack {
-            ForEach(player.cards) {
-                PlayingCardView(playingCard: $0)
+        ScrollView(.horizontal) {
+            LazyHStack {
+                Text(player.name)
+                    .padding()
+                    .background(Color(.secondarySystemBackground).cornerRadius(15))
+                    .padding()
+                ForEach(player.cards) {
+                    PlayingCardView(playingCard: $0)
+                }
             }
         }
+        .padding(.vertical)
     }
     
 }

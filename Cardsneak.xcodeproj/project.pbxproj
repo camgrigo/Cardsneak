@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C156540225DB33AC00CB0464 /* CardStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C156540125DB33AC00CB0464 /* CardStackView.swift */; };
 		C15FC8FF25D34541009346A2 /* Cardsneak__iOS_App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FC8FE25D34541009346A2 /* Cardsneak__iOS_App.swift */; };
 		C15FC90125D34542009346A2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FC90025D34542009346A2 /* ContentView.swift */; };
 		C15FC90325D34544009346A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C15FC90225D34544009346A2 /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C156540125DB33AC00CB0464 /* CardStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackView.swift; sourceTree = "<group>"; };
 		C15FC8FC25D34541009346A2 /* Cardsneak (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cardsneak (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15FC8FE25D34541009346A2 /* Cardsneak__iOS_App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardsneak__iOS_App.swift; sourceTree = "<group>"; };
 		C15FC90025D34542009346A2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				C188C04325D8D639000BD3FE /* MainGameView.swift */,
+				C156540125DB33AC00CB0464 /* CardStackView.swift */,
 				C188C6EA25DA59250018E892 /* PlayerView.swift */,
 				C15FC8FE25D34541009346A2 /* Cardsneak__iOS_App.swift */,
 				C15FC90025D34542009346A2 /* ContentView.swift */,
@@ -240,6 +243,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C188C04525D8D65E000BD3FE /* MainGameView.swift in Sources */,
+				C156540225DB33AC00CB0464 /* CardStackView.swift in Sources */,
 				C188C6E925DA57200018E892 /* PlayingCardView.swift in Sources */,
 				C189A99925D45DA200CCD8A1 /* NameGenerator.swift in Sources */,
 				C189A99325D45DA200CCD8A1 /* Deck.swift in Sources */,

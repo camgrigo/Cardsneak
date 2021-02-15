@@ -23,8 +23,12 @@ class GameModel: ObservableObject {
     var playerCarousel = Carousel<Player>()
     var rankCarousel = Carousel(PlayingCard.Rank.allCases)
     var turns = [Turn]()
-    var stackCount: Int {
-        turns.reduce(0) { $0 + $1.cards.count }
+    var stack: [PlayingCard] {
+        turns.reduce([]) {
+            var a = $0
+            a.append(contentsOf: $1.cards)
+            return a
+        }
     }
     
     @Published var isInProgress = false
@@ -64,9 +68,18 @@ class GameModel: ObservableObject {
             Player(name: nameGenerator.generate(), id: 4)
         ])
         
-        Deck()
-            .shuffle()
-            .deal(to: playerCarousel.contents)
+        
+        func deal(to characters: [Player]) {
+            var cards = Deck().shuffled().cards
+            var characters = Carousel(characters)
+            
+            while !cards.isEmpty {
+                let card = cards.popLast()!
+                characters.next().cards.append(card)
+            }
+        }
+        
+        deal(to: playerCarousel.contents)
         
         playerCarousel.spin()
         
@@ -78,7 +91,7 @@ class GameModel: ObservableObject {
         let player = playerCarousel.next()
         let rank = rankCarousel.next()
         
-        print("The stack has \(stackCount) \(stackCount == 1 ? "card" : "cards")")
+        print("The stack has \(stack.count) \(stack.count == 1 ? "card" : "cards")")
         print("Player:", player.name, "\nRank:", rank)
         
         var discardedCards = [PlayingCard]()
@@ -178,7 +191,7 @@ class GameModel: ObservableObject {
             }
             
             print("\n\(recipient.name) gets all the cards in the stack!!!")
-            print("\(stackCount) \(stackCount == 1 ? "card" : "cards")")
+            print("\(stack.count) \(stack.count == 1 ? "card" : "cards")")
             
             let index = playerCarousel.contents.firstIndex { $0.id == recipient.id }!
             playerCarousel.contents[index].cards.append(contentsOf: turns.reduce([]) { $0 + $1.cards })
