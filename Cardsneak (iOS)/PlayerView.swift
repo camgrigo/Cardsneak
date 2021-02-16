@@ -9,21 +9,68 @@ import SwiftUI
 
 struct PlayerView: View {
     
-    var player: Player
+    var player: UserControlledPlayer
+    
+    @State private var selectedCards = [PlayingCard]()
+    
+    @Binding var isSelecting: Bool
+    
+    let submitCards: ([PlayingCard]) -> Void
     
     var body: some View {
-        ScrollView(.horizontal) {
-            LazyHStack {
-                Text(player.name)
-                    .padding()
-                    .background(Color(.secondarySystemBackground).cornerRadius(15))
-                    .padding()
-                ForEach(player.cards) {
-                    PlayingCardView(playingCard: $0)
+        VStack {
+            ScrollView(.horizontal) {
+                LazyHStack {
+                    ForEach(player.cards) { card in
+                        if isSelecting {
+                            if let index = selectedCards.firstIndex(of: card) {
+                                PlayingCardView(playingCard: card)
+                                    .onTapGesture {
+                                        selectedCards.remove(at: index)
+                                    }
+                                
+                            } else {
+                                PlayingCardView(playingCard: card)
+                                    .shadow(color: .red, radius: 5)
+                                    .onTapGesture {
+                                        selectedCards.append(card)
+                                    }
+                            }
+                        } else {
+                            PlayingCardView(playingCard: card)
+                        }
+                    }
+                }
+            }
+            .padding(.vertical)
+            
+            if isSelecting {
+                Button("Done") {
+                    submitCards(selectedCards)
+                    selectedCards.removeAll()
                 }
             }
         }
-        .padding(.vertical)
+    }
+    
+}
+
+struct ChallengePicker: View {
+    
+    let submit: (Bool) -> Void
+    
+    var body: some View {
+        VStack {
+            Text("Challenge?")
+            HStack {
+                Button("Yes") {
+                    submit(true)
+                }
+                Button("No") {
+                    submit(false)
+                }
+            }
+        }
     }
     
 }

@@ -7,27 +7,38 @@
 
 import Foundation
 
-class Player: Identifiable {
+protocol Player: Identifiable {
+    var name: String { get }
+    var id: Int { get }
+    var cards: [PlayingCard] { get set }
+    
+    
+    func getPlay(rank: PlayingCard.Rank, handler: ([PlayingCard]) -> Void)
+    
+    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: (Bool) -> Void)
+}
+
+class AIPlayer: Player {
     let name: String
     let id: Int
-    let isNPC: Bool
     
-    init(name: String, id: Int, isNPC: Bool = true) {
-        self.name = name
-        self.id = id
-        self.isNPC = isNPC
-    }
-    
-    let caution = (0...8).randomElement()!
+    private let caution = (0...8).randomElement()!
     
     var cards = [PlayingCard]()
-    var cardList: String {
-        cards.enumerated()
-            .map { "\($0.offset) | \($0.element.rank) \($0.element.suit)" }
-            .joined(separator: "\n")
+    //    var cardList: String {
+    //        cards.enumerated()
+    //            .map { "\($0.offset) | \($0.element.rank) \($0.element.suit)" }
+    //            .joined(separator: "\n")
+    //    }
+    
+    
+    init(name: String, id: Int) {
+        self.name = name
+        self.id = id
     }
     
-    func discardCards(of rank: PlayingCard.Rank) -> [PlayingCard] {
+    
+    func getPlay(rank: PlayingCard.Rank, handler: ([PlayingCard]) -> Void) {
         var discard = cards.filter { $0.rank == rank }
         
         if discard.isEmpty {
@@ -44,19 +55,19 @@ class Player: Identifiable {
             discard.append(card)
         }
         
-        return discard
+        handler(discard)
     }
     
-    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank) -> Bool {
+    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: (Bool) -> Void) {
         // Opinion of player (Player did/did not challenge him before)
         // Threatened by player (Card count)
         // High card count
         // Good/Bad expectations for next turn (I have all the aces/I don't have any aces)
         let confidenceLevel = (cardCountConfidenceScore() + 5
-//            nextTurnProjection(nextRank: <#T##PlayingCard.Rank#>)
+                               //            nextTurnProjection(nextRank: <#T##PlayingCard.Rank#>)
         ) / 2
         
-        return confidenceLevel >= caution
+        handler(confidenceLevel >= caution)
     }
     
     private func cardCountConfidenceScore() -> Int {
@@ -71,8 +82,36 @@ class Player: Identifiable {
     
 }
 
-extension Player: Equatable {
-    static func == (lhs: Player, rhs: Player) -> Bool {
+class UserControlledPlayer: Player {
+    
+    enum State {
+        case idle, pickingCards, decidingChallenge
+    }
+    
+    static func == (lhs: UserControlledPlayer, rhs: UserControlledPlayer) -> Bool {
         lhs.id == rhs.id
     }
+    
+    let name: String
+    let id: Int
+    
+    var cards = [PlayingCard]()
+    
+    var state = State.idle
+    
+    
+    init(name: String, id: Int) {
+        self.name = name
+        self.id = id
+    }
+    
+    
+    func getPlay(rank: PlayingCard.Rank, handler: ([PlayingCard]) -> Void) {
+        state = .pickingCards
+    }
+    
+    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: (Bool) -> Void) {
+        state = .decidingChallenge
+    }
+    
 }

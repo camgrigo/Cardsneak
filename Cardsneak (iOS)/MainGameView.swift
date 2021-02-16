@@ -21,26 +21,30 @@ struct MainGameView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+            ZStack {
+                Color(#colorLiteral(red: 0, green: 1, blue: 0.7009260655, alpha: 1))
+                    .edgesIgnoringSafeArea(.all)
                 VStack {
-                    HStack {
-                        
+                    Text("\(gameModel.playerCarousel.currentElement.name)'s Turn")
+                    VStack {
+                        HStack {
                             CardStackView(cards: gameModel.playerCarousel.contents[1].cards)
                             Spacer()
                             CardStackView(cards: gameModel.playerCarousel.contents[2].cards)
+                        }
+                        HStack {
+                            Spacer()
+                            CardStackView(cards: gameModel.stack, showsCount: true)
+                            Spacer()
+                        }
+                        HStack {
+                            CardStackView(cards: gameModel.playerCarousel.contents[3].cards)
+                            Spacer()
+                            CardStackView(cards: gameModel.playerCarousel.contents[4].cards)
+                        }
                     }
-                    HStack {
-                        Spacer()
-                        CardStackView(cards: gameModel.stack)
-                        Spacer()
-                    }
-                    HStack {
-                        CardStackView(cards: gameModel.playerCarousel.contents[3].cards)
-                        Spacer()
-                        CardStackView(cards: gameModel.playerCarousel.contents[4].cards)
-                    }
+                    PlayerView(player: gameModel.mainPlayer!)
                 }
-                PlayerView(player: gameModel.mainPlayer!)
             }
             .toolbar {
                 ToolbarItem { menuButton }

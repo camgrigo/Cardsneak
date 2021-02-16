@@ -72,7 +72,8 @@ struct ContentView: View {
                 StylizedTextField(title: "Player name", text: $name)
                     .padding()
                 Button(action: {
-                    gameModel.startGame(player: Player(name: name, id: 0, isNPC: false))
+                    gameModel.mainPlayer = UserControlledPlayer(name: name, id: 0)
+                    gameModel.startGame()
                 }) {
                     startButton
                 }

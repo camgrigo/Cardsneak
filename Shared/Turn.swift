@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Turn: CustomStringConvertible {
-    let player: Player
+struct Turn<T: Player>: CustomStringConvertible {
+    let player: T
     let rank: PlayingCard.Rank
     let cards: [PlayingCard]
     

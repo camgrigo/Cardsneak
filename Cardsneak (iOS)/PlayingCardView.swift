@@ -14,7 +14,13 @@ struct PlayingCardView: View {
     
     var playingCard: PlayingCard
     
-    var isFaceDown = false
+    var isFaceDown: Bool
+    
+    
+    init(playingCard: PlayingCard, isFaceDown: Bool = false) {
+        self.playingCard = playingCard
+        self.isFaceDown = isFaceDown
+    }
     
     
     private var gradient: LinearGradient {
