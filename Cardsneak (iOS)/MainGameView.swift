@@ -30,9 +30,9 @@ struct MainGameView: View {
                     Text("\("Cameron")'s Turn")
                     VStack {
                         HStack {
-                            CardStackView(cards: gameModel.players[1].cards)
+                            Text("\(gameModel.players.first { $0.id == 1 }?.cards.count ?? 0)")
                             Spacer()
-                            CardStackView(cards: gameModel.players[2].cards)
+                            Text("\(gameModel.players.first { $0.id == 2 }?.cards.count ?? 0)")
                         }
                         HStack {
                             Spacer()
@@ -40,12 +40,12 @@ struct MainGameView: View {
                             Spacer()
                         }
                         HStack {
-                            CardStackView(cards: gameModel.players[3].cards)
+                            Text("\(gameModel.players.first { $0.id == 3 }?.cards.count ?? 0)")
                             Spacer()
-                            CardStackView(cards: gameModel.players[4].cards)
+                            Text("\(gameModel.players.first { $0.id == 4 }?.cards.count ?? 0)")
                         }
                     }
-                    PlayerView(userPlayerController: gameModel.mainPlayer!, gameModel: gameModel) {
+                    PlayerView(userPlayer: gameModel.mainPlayer, gameModel: gameModel) {
                         gameModel.receivePlay(cards: $0)
                     }
                 }

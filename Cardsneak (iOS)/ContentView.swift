@@ -49,7 +49,7 @@ struct StylizedTextField: View {
 
 struct ContentView: View {
     
-    @State private var gameModel: GameModel?
+    @State private var gameModel = GameModel(mainPlayer: UserPlayer(name: String(), id: 0))
     
     @State private var name = String()
     
@@ -76,26 +76,17 @@ struct ContentView: View {
             }
         }
         .fullScreenCover(isPresented: $gameViewIsPresented) {
-            MainGameView(isPresented: $gameViewIsPresented).environmentObject(gameModel!)
+            MainGameView(isPresented: $gameViewIsPresented).environmentObject(gameModel)
         }
     }
     
     
     private func startGame() {
-        let gameModel = GameModel()
+        gameModel = GameModel(mainPlayer: UserPlayer(name: name, id: 0))
         
-        gameModel.mainPlayer = UserPlayerController(name: name, id: 0)
         gameModel.startGame()
-        
-        self.gameModel = gameModel
         
         gameViewIsPresented = true
     }
     
 }
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}

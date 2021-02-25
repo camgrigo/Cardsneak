@@ -7,7 +7,7 @@
 
 import Foundation
 
-class UserPlayerController: Player, ObservableObject {
+class UserPlayer: Player, ObservableObject {
     
     let name: String
     
@@ -32,10 +32,12 @@ class UserPlayerController: Player, ObservableObject {
     
     
     func getPlay(rank: PlayingCard.Rank, handler: @escaping ([PlayingCard]) -> Void) {
+        print("User selecting cards…")
         state = .selectingCards
     }
     
     func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: @escaping (Bool) -> Void) {
+        print("User deciding whether to challenge…")
         state = .decidingChallenge
     }
     

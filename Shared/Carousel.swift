@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Carousel<Element>: Collection, ExpressibleByArrayLiteral {
+public class Carousel<Element>: Collection, ExpressibleByArrayLiteral {
     
     public typealias Index = Int
     
@@ -34,7 +34,7 @@ public struct Carousel<Element>: Collection, ExpressibleByArrayLiteral {
     
     // MARK: - Increment & Decrement
     
-    mutating func increment() {
+    func increment() {
         currentIndex = index(after: currentIndex)
     }
     
@@ -43,7 +43,7 @@ public struct Carousel<Element>: Collection, ExpressibleByArrayLiteral {
         return nextIndex < contents.endIndex ? nextIndex : contents.startIndex
     }
     
-    mutating func decrement() {
+    func decrement() {
         currentIndex = index(before: currentIndex)
     }
     
@@ -54,23 +54,23 @@ public struct Carousel<Element>: Collection, ExpressibleByArrayLiteral {
     
     // MARK: - Interaction
     
-    public mutating func next() -> Element {
+    public func next() -> Element {
         defer { increment() }
         
         return contents[currentIndex]
     }
     
-    public mutating func previous() -> Element {
+    public func previous() -> Element {
         defer { decrement() }
         
         return contents[currentIndex]
     }
     
-    public mutating func append(_ item: Element) {
+    public func append(_ item: Element) {
         contents.append(item)
     }
     
-    public mutating func spin() {
+    public func spin() {
         let spinCount = (0..<contents.count).randomElement()!
         
         guard spinCount >= 1 else { return }
@@ -93,7 +93,7 @@ public struct Carousel<Element>: Collection, ExpressibleByArrayLiteral {
     }
     
     /// Creates an instance initialized with the given elements.
-    public init(arrayLiteral elements: Element...) {
+    required public convenience init(arrayLiteral elements: Element...) {
         self.init(elements)
     }
     

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PlayerView: View {
     
-    @ObservedObject var userPlayerController: UserPlayerController
+    @ObservedObject var userPlayer: UserPlayer
     
     @ObservedObject var gameModel: GameModel
     
@@ -18,17 +18,17 @@ struct PlayerView: View {
     let submitCards: ([PlayingCard]) -> Void
     
     var body: some View {
-        if userPlayerController.state == .decidingChallenge {
+        if userPlayer.state == .decidingChallenge {
             ChallengePicker { shouldChallenge in
-                _ = gameModel.receiveChallenge(playerId: userPlayerController.id)
+                _ = gameModel.receiveChallenge(playerId: userPlayer.id)
             }
             
         } else {
                 VStack {
                     ScrollView(.horizontal) {
                         LazyHStack {
-                            ForEach(userPlayerController.cards) { card in
-                                if userPlayerController.state == .selectingCards {
+                            ForEach(userPlayer.cards) { card in
+                                if userPlayer.state == .selectingCards {
                                     
                                     if let index = selectedCards.firstIndex(of: card) {
                                         PlayingCardView(playingCard: card)
@@ -52,7 +52,7 @@ struct PlayerView: View {
                     }
                     .padding(.vertical)
                     
-                    if userPlayerController.state == .selectingCards {
+                    if userPlayer.state == .selectingCards {
                         Button("Done") {
                             submitCards(selectedCards)
                             selectedCards.removeAll()

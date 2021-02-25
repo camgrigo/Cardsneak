@@ -19,10 +19,16 @@ class GameModel: ObservableObject {
     
     let nameGenerator = NameGenerator()
     
-    var mainPlayer: UserPlayerController?
+    var mainPlayer: UserPlayer
     
-    @Published var playerCarousel = Carousel<Int>()
-    var players = [Player]()
+    init(mainPlayer: UserPlayer) {
+        self.mainPlayer = mainPlayer
+    }
+    
+    @Published var playerCarousel = Carousel<Player>()
+    var players: [Player] {
+        playerCarousel.contents
+    }
     var rankCarousel = Carousel(PlayingCard.Rank.allCases)
     var turns = [Turn]()
     var stack: [PlayingCard] {
@@ -46,14 +52,13 @@ class GameModel: ObservableObject {
     
     
     func configurePlayers() {
-        players = [
-            mainPlayer!,
-            AIPlayerController(name: nameGenerator.generate(), id: 1),
-            AIPlayerController(name: nameGenerator.generate(), id: 2),
-            AIPlayerController(name: nameGenerator.generate(), id: 3),
-            AIPlayerController(name: nameGenerator.generate(), id: 4)
-        ]
-        playerCarousel = Carousel(players.map { $0.id })
+        playerCarousel = Carousel([
+            mainPlayer,
+            AIPlayer(name: nameGenerator.generate(), id: 1),
+            AIPlayer(name: nameGenerator.generate(), id: 2),
+            AIPlayer(name: nameGenerator.generate(), id: 3),
+            AIPlayer(name: nameGenerator.generate(), id: 4)
+        ])
         
         print(players.map { "\($0.id): \($0.name)" })
     }
@@ -68,11 +73,9 @@ class GameModel: ObservableObject {
         
         while !cards.isEmpty {
             let card = cards.popLast()!
+            var player = playerCarousel.next()
             
-            if let index = players.firstIndex(where: { $0.id == playerCarousel.next() }) {
-                players[index].accept(card)
-                print("Player \(players[index].id) Card Count: \(players[index].cards.count)")
-            }
+            player.accept(card)
         }
         
         print(players.map { "Player \($0.id) Card Count: \($0.cards.count)" })
@@ -93,11 +96,9 @@ class GameModel: ObservableObject {
     func startTurn() {
         let player = playerCarousel.next()
         let rank = rankCarousel.next()
-        print("Turn: Player \(player), Rank: \(rank)")
         
-        players
-            .first { $0.id == player }!
-            .getPlay(rank: rank, handler: receivePlay)
+        print("Turn: Player \(player), Rank: \(rank)")
+        player.getPlay(rank: rank, handler: receivePlay)
     }
     
     func receivePlay(cards: [PlayingCard]) {
@@ -106,7 +107,7 @@ class GameModel: ObservableObject {
         
         let turn = Turn(
             id: (turns.last?.id ?? 0 + 1),
-            playerId: playerCarousel.currentElement,
+            playerId: playerCarousel.currentElement.id,
             rank: rankCarousel.currentElement,
             cards: cards
         )
@@ -116,17 +117,21 @@ class GameModel: ObservableObject {
     }
     
     func finish(_ turn: Turn) {
-        let currentPlayerId = playerCarousel.currentElement
-        let currentPlayer = players.first { $0.id == currentPlayerId }!
+        let currentPlayer = playerCarousel.currentElement
         
         state = .challenge
         print("Challenging open")
         
         players
-            .filter { $0.id != currentPlayerId }
+            .filter { $0.id != currentPlayer.id }
             .forEach { playerController in
-                playerController.shouldChallenge(player: (playerId: currentPlayerId, cardCount: currentPlayer.cards.count), rank: rankCarousel.currentElement) { isChallenging in
-                    if isChallenging, let lastTurn = self.turns.last, lastTurn.id == turn.id {
+                playerController.shouldChallenge(
+                    player: (playerId: currentPlayer.id, cardCount: currentPlayer.cards.count),
+                    rank: rankCarousel.currentElement
+                ) { isChallenging in
+                    if isChallenging,
+                       let lastTurn = self.turns.last,
+                       lastTurn.id == turn.id {
                         _ = self.receiveChallenge(playerId: playerController.id)
                     }
                 }
@@ -160,15 +165,15 @@ class GameModel: ObservableObject {
     func executeChallenge(playerId: Int) {
         let lastTurn = turns.last!
         let recipientId = lastTurn.isCheat ? lastTurn.playerId : playerId
+        
+        let recipientIndex = playerCarousel.contents.firstIndex { $0.id == recipientId }!
         let cards = turns.reduce([]) { $0 + $1.cards }
         
-        turns.removeAll()
+        playerCarousel.contents[recipientIndex].accept(cards)
         
-        let index = players.firstIndex { $0.id == recipientId }!
+        turns.removeAll(keepingCapacity: true)
         
-        players[index].accept(cards)
-        
-        print("Player \(players[index].name) gets \(cards.count) card(s).")
+        print("Player \(playerCarousel.contents[recipientIndex].name) gets \(cards.count) card(s).")
     }
     
     func endGame() {
