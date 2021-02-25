@@ -25,12 +25,12 @@ struct MainGameView: View {
                 Color(#colorLiteral(red: 0, green: 1, blue: 0.7009260655, alpha: 1))
                     .edgesIgnoringSafeArea(.all)
                 VStack {
-                    Text("\(gameModel.playerCarousel.currentElement.name)'s Turn")
+                    Text("\("Cameron")'s Turn")
                     VStack {
                         HStack {
-                            CardStackView(cards: gameModel.playerCarousel.contents[1].cards)
+                            CardStackView(cards: gameModel.players[1].player.cards)
                             Spacer()
-                            CardStackView(cards: gameModel.playerCarousel.contents[2].cards)
+                            CardStackView(cards: gameModel.players[2].player.cards)
                         }
                         HStack {
                             Spacer()
@@ -38,26 +38,28 @@ struct MainGameView: View {
                             Spacer()
                         }
                         HStack {
-                            CardStackView(cards: gameModel.playerCarousel.contents[3].cards)
+                            CardStackView(cards: gameModel.players[3].player.cards)
                             Spacer()
-                            CardStackView(cards: gameModel.playerCarousel.contents[4].cards)
+                            CardStackView(cards: gameModel.players[4].player.cards)
                         }
                     }
-                    PlayerView(player: gameModel.mainPlayer!)
+                    PlayerView(userPlayerController: gameModel.mainPlayer!, gameModel: gameModel) {
+                        gameModel.receivePlay(cards: $0)
+                    }
                 }
             }
             .toolbar {
                 ToolbarItem { menuButton }
             }
         }
-        .actionSheet(isPresented: $isShowingMenu, content: {
+        .actionSheet(isPresented: $isShowingMenu) {
             ActionSheet(title: Text("Menu"), buttons: [
                 .destructive(Text("End Game")) {
                     gameModel.endGame()
                 },
                 .cancel(Text("Close"))
             ])
-        })
+        }
     }
     
 }

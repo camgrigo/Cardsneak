@@ -7,16 +7,13 @@
 
 import Foundation
 
-struct Turn<T: Player>: CustomStringConvertible {
-    let player: T
+struct Turn {
+    let id: Int
+    let playerId: Int
     let rank: PlayingCard.Rank
     let cards: [PlayingCard]
     
     var isCheat: Bool {
         !cards.allSatisfy { $0.rank == rank }
-    }
-    
-    var description: String {
-        "\(player.name) put down \(cards.count) \(cards.count == 1 ? "card" : "cards") of supposed rank \(rank)."
     }
 }

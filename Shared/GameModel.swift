@@ -19,8 +19,10 @@ class GameModel: ObservableObject {
     
     let nameGenerator = NameGenerator()
     
-    @Published var mainPlayer: UserControlledPlayer?
-    var playerCarousel = Carousel<Player>()
+    var mainPlayer: UserPlayerController?
+    
+    @Published var playerCarousel = Carousel<Int>()
+    var players = [PlayerController]()
     var rankCarousel = Carousel(PlayingCard.Rank.allCases)
     var turns = [Turn]()
     var stack: [PlayingCard] {
@@ -33,111 +35,145 @@ class GameModel: ObservableObject {
     
     @Published var isInProgress = false
     
+    var allHaveCards: Bool {
+        players.allSatisfy { !$0.player.cards.isEmpty }
+    }
     
-    func startGame() {
-        isInProgress = true
-        
-        //        print("\nWelcome, \(player.name). This is Cardsneak.")
-        
-        playerCarousel = Carousel([
+    
+    enum GameState {
+        case deal, discard, challenge, collection
+    }
+    
+    @Published var state = GameState.deal
+    
+    
+    func configurePlayers() {
+        players = [
             mainPlayer!,
-            AIPlayer(name: nameGenerator.generate(), id: 1),
-            AIPlayer(name: nameGenerator.generate(), id: 2),
-            AIPlayer(name: nameGenerator.generate(), id: 3),
-            AIPlayer(name: nameGenerator.generate(), id: 4)
-        ])
+            AIPlayerController(player: Player(name: nameGenerator.generate(), id: 1)),
+            AIPlayerController(player: Player(name: nameGenerator.generate(), id: 2)),
+            AIPlayerController(player: Player(name: nameGenerator.generate(), id: 3)),
+            AIPlayerController(player: Player(name: nameGenerator.generate(), id: 4))
+        ]
+        playerCarousel = Carousel(players.map { $0.player.id })
         
+        print(players.map { "\($0.player.id): \($0.player.name)" })
+    }
+    
+    func dealCards() {
+        print("Dealing cards…")
         
-        func deal<T: Player>(to characters: [T]) {
-            var cards = Deck().shuffled().cards
-            var characters = Carousel(characters)
+        var cards = Deck().shuffled().cards
+        
+        while !cards.isEmpty {
+            let card = cards.popLast()!
             
-            while !cards.isEmpty {
-                let card = cards.popLast()!
-                characters.next().cards.append(card)
+            if let index = players.firstIndex(where: { $0.player.id == playerCarousel.next() }) {
+                players[index].accept(card)
             }
         }
         
-        deal(to: playerCarousel.contents)
-        
-        playerCarousel.spin()
-        
-        requestPlay(player: playerCarousel.next(), rank: rankCarousel.next())
+        print(players.map { "Player \($0.player.id) Card Count: \($0.player.cards.count)" })
     }
     
-    func requestPlay<T: Player>(player: T, rank: PlayingCard.Rank) {
-        player.getPlay(rank: rank) { cards in
-            receivePlay(player: player, rank: rank, cards: cards)
+    func startGame() {
+        print("Game starting")
+        isInProgress = true
+        
+        configurePlayers()
+        dealCards()
+        
+        playerCarousel.spin()
+        print("Starting player:", playerCarousel.currentElement)
+        
+        startTurn()
+    }
+    
+    func startTurn() {
+        players
+            .first { $0.player.id == playerCarousel.next() }?
+            .getPlay(rank: rankCarousel.next(), handler: receivePlay)
+    }
+    
+    func receivePlay(cards: [PlayingCard]) {
+        state = .discard
+        print("Discarding…")
+        
+        let turn = Turn(
+            id: (turns.last?.id ?? 0 + 1),
+            playerId: playerCarousel.currentElement,
+            rank: rankCarousel.currentElement,
+            cards: cards
+        )
+        turns.append(turn)
+        
+        let currentPlayerId = playerCarousel.currentElement
+        let currentPlayer = players.first { $0.player.id == currentPlayerId }!
+        
+        players
+            .filter { $0.player.id != currentPlayerId }
+            .forEach { playerController in
+                playerController.shouldChallenge(player: (playerId: currentPlayerId, cardCount: currentPlayer.player.cards.count), rank: rankCarousel.currentElement) { isChallenging in
+                    if isChallenging, let lastTurn = self.turns.last, lastTurn.id == turn.id {
+                        _ = self.receiveChallenge(playerId: playerController.player.id)
+                    }
+                }
+            }
+        
+        //                    print("No challengers. You're safe, \(player.name).")
+        
+        if allHaveCards {
+            startTurn()
+            
+        } else {
+            gameOver()
         }
     }
     
-    func receivePlay<T: Player>(player: T, rank: PlayingCard.Rank, cards: [PlayingCard]) {
-        let turn = Turn(player: player, rank: rank, cards: cards)
-        turns.append(turn)
-        //        print(turn)
-        //        print("Challenge or no challenge?")
+    func receiveChallenge(playerId: Int) -> Bool {
+        guard state == .challenge else {
+            print("Player \(playerId) challenge failed.")
+            
+            return false
+        }
         
+        print("Player \(playerId) challenge succeeded.")
         
-        var challengers = playerCarousel.contents
-            .filter { $0.id != player.id && $0.id != mainPlayer?.id }
-            .filter { _ in [false, false, false, false, true].randomElement()! }
+        state = .collection
         
-        //        if player != mainPlayer {
-        //            needsInput = .challenge
-        ////            let line = readLine() ?? ""
-        //
-        ////            if !line.isEmpty {
-        ////                challengers.append(mainPlayer!)
-        ////            }
-        //        }
-        //
-        //        challengers.shuffle()
-        //
-        //        if let firstChallenger = challengers.first {
-        //            print("\(challengers.count) \(challengers.count == 1 ? "challenger" : "challengers")!")
-        //            print("\n\n\"LIES!!!\"\n—\(firstChallenger.name)\n\n")
-        //            let lastTurn = turns.last!
-        //
-        //            let recipient: Player
-        //
-        //            if lastTurn.isCheat {
-        //                print("Challenger wins!")
-        //                recipient = lastTurn.player
-        //
-        //            } else {
-        //                print("Challenger loses!")
-        //                recipient = firstChallenger
-        //            }
-        //
-        //            print("\n\(recipient.name) gets all the cards in the stack!!!")
-        //            print("\(stack.count) \(stack.count == 1 ? "card" : "cards")")
-        //
-        //            let index = playerCarousel.contents.firstIndex { $0.id == recipient.id }!
-        //            playerCarousel.contents[index].cards.append(contentsOf: turns.reduce([]) { $0 + $1.cards })
-        //            turns.removeAll()
-        //        } else {
-        //            print("No challengers. You're safe, \(player.name).")
-        //        }
-        //
-        //
-        //        let allHaveCards = playerCarousel.contents.allSatisfy { !$0.cards.isEmpty }
-        //
-        //        if allHaveCards {
-        //                requestPlay(player: playerCarousel.next(), rank: rankCarousel.next())
-        //
-        //        } else {
-        //            gameOver()
-        //        }
+        print("Collecting…")
+        
+        executeChallenge(playerId: playerId)
+        
+        return true
+    }
+    
+    func executeChallenge(playerId: Int) {
+        let lastTurn = turns.last!
+        let recipientId = lastTurn.isCheat ? lastTurn.playerId : playerId
+        let cards = turns.reduce([]) { $0 + $1.cards }
+        
+        turns.removeAll()
+        
+        let index = players.firstIndex { $0.player.id == recipientId }!
+        
+        players[index].accept(cards)
+        
+        print("Player \(players[index].player.name) gets \(cards.count) card(s).")
     }
     
     func endGame() {
+        print("Game ended")
+        
         isInProgress = false
     }
     
     
     func gameOver() {
+        print("Game over")
+        
         isInProgress = false
-        print("\n\nThanks for playing!\n")
-        startGame(player: getPlayer(prompt: "Play again? Enter your name:"))
+        //        print("\n\nThanks for playing!\n")
+        //        startGame(player: getPlayer(prompt: "Play again? Enter your name:"))
     }
 }

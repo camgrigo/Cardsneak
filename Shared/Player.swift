@@ -7,58 +7,80 @@
 
 import Foundation
 
-protocol Player: Identifiable {
+struct Player {
+    let name: String
+    let id: Int
+    var cards = [PlayingCard]()
+}
+
+protocol PlayerController {
+    
+    var player: Player { get set }
+    
     var name: String { get }
     var id: Int { get }
     var cards: [PlayingCard] { get set }
     
     
-    func getPlay(rank: PlayingCard.Rank, handler: ([PlayingCard]) -> Void)
+    mutating func accept(_ cards: PlayingCard...)
+    mutating func accept(_ cards: [PlayingCard])
     
-    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: (Bool) -> Void)
+    func getPlay(rank: PlayingCard.Rank, handler: @escaping ([PlayingCard]) -> Void)
+    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: @escaping (Bool) -> Void)
+
 }
 
-class AIPlayer: Player {
+extension PlayerController {
+    
+    mutating func accept(_ cards: [PlayingCard]) {
+        player.cards.append(contentsOf: cards)
+    }
+    
+    mutating func accept(_ cards: PlayingCard...) {
+        player.cards.append(contentsOf: cards)
+    }
+    
+}
+
+class AIPlayerController: PlayerController {
     let name: String
+    
     let id: Int
+    
+    var cards = [PlayingCard]()
+    
+    var player: Player
     
     private let caution = (0...8).randomElement()!
     
-    var cards = [PlayingCard]()
-    //    var cardList: String {
-    //        cards.enumerated()
-    //            .map { "\($0.offset) | \($0.element.rank) \($0.element.suit)" }
-    //            .joined(separator: "\n")
-    //    }
-    
-    
-    init(name: String, id: Int) {
-        self.name = name
-        self.id = id
+    init(player: Player) {
+        self.player = player
     }
     
     
-    func getPlay(rank: PlayingCard.Rank, handler: ([PlayingCard]) -> Void) {
-        var discard = cards.filter { $0.rank == rank }
+    func getPlay(rank: PlayingCard.Rank, handler: @escaping ([PlayingCard]) -> Void) {
+        var discard = player.cards.filter { $0.rank == rank }
         
         if discard.isEmpty {
             discard.append(
                 contentsOf: (0..<(1...2).randomElement()!)
-                    .map { _ in cards.popRandomElement() }
+                    .map { _ in player.cards.popRandomElement() }
                     .compactMap { $0 }
             )
         }
         
         // If not cautious, add an extra card
-        if let card = cards.popRandomElement(),
+        if let card = player.cards.popRandomElement(),
            caution < 5 && discard.count < 3 {
             discard.append(card)
         }
         
-        handler(discard)
+        DispatchQueue.main.asyncAfter(deadline: .now() + [2, 3, 4].randomElement()!) {
+            handler(discard)
+        }
     }
     
-    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: (Bool) -> Void) {
+    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: @escaping (Bool) -> Void) {
         // Opinion of player (Player did/did not challenge him before)
         // Threatened by player (Card count)
         // High card count
@@ -67,50 +89,51 @@ class AIPlayer: Player {
                                //            nextTurnProjection(nextRank: <#T##PlayingCard.Rank#>)
         ) / 2
         
-        handler(confidenceLevel >= caution)
+        DispatchQueue.main.asyncAfter(deadline: .now() + [0.5, 0.75, 1].randomElement()!) {
+            handler(confidenceLevel >= self.caution)
+        }
     }
     
     private func cardCountConfidenceScore() -> Int {
-        Int((max(0, 20 - cards.count) / 20) * 10)
+        Int((max(0, 20 - player.cards.count) / 20) * 10)
     }
     
     private func nextTurnProjection(nextRank: PlayingCard.Rank) -> Int {
-        let matches = cards.filter { $0.rank == nextRank }
+        let matches = player.cards.filter { $0.rank == nextRank }
         
         return Int((matches.count / 4) * 10)
     }
     
 }
 
-class UserControlledPlayer: Player {
-    
-    enum State {
-        case idle, pickingCards, decidingChallenge
-    }
-    
-    static func == (lhs: UserControlledPlayer, rhs: UserControlledPlayer) -> Bool {
-        lhs.id == rhs.id
-    }
-    
+class UserPlayerController: PlayerController, ObservableObject {
     let name: String
+    
     let id: Int
     
     var cards = [PlayingCard]()
     
-    var state = State.idle
     
-    
-    init(name: String, id: Int) {
-        self.name = name
-        self.id = id
+    enum State {
+        case viewing, selectingCards, decidingChallenge
     }
     
     
-    func getPlay(rank: PlayingCard.Rank, handler: ([PlayingCard]) -> Void) {
-        state = .pickingCards
+    var player: Player
+    
+    @Published var state = State.viewing
+    
+    
+    init(player: Player) {
+        self.player = player
     }
     
-    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: (Bool) -> Void) {
+    
+    func getPlay(rank: PlayingCard.Rank, handler: @escaping ([PlayingCard]) -> Void) {
+        state = .selectingCards
+    }
+    
+    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: @escaping (Bool) -> Void) {
         state = .decidingChallenge
     }
     
