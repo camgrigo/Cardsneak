@@ -10,13 +10,10 @@ import SwiftUI
 @main
 struct Cardsneak__iOS_App: App {
     
-    @ObservedObject var gameModel = GameModel()
-    
     var body: some Scene {
         WindowGroup {
             NavigationView {
                 ContentView()
-                    .environmentObject(gameModel)
             }
         }
     }

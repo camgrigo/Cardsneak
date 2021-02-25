@@ -49,9 +49,11 @@ struct StylizedTextField: View {
 
 struct ContentView: View {
     
-    @EnvironmentObject var gameModel: GameModel
+    @State private var gameModel: GameModel?
     
     @State private var name = String()
+    
+    @State private var gameViewIsPresented = false
     
     
     var startButton: some View {
@@ -69,21 +71,27 @@ struct ContentView: View {
                 .edgesIgnoringSafeArea(.all)
             VStack {
                 TitleCard()
-                StylizedTextField(title: "Player name", text: $name)
-                    .padding()
-                Button(action: {
-                    gameModel.mainPlayer = UserPlayerController(name: name, id: 0)
-                    gameModel.startGame()
-                }) {
-                    startButton
-                }
+                StylizedTextField(title: "Player name", text: $name).padding()
+                Button(action: startGame) { startButton }
             }
         }
-        .fullScreenCover(isPresented: $gameModel.isInProgress, content: {
-            MainGameView()
-                .environmentObject(gameModel)
-        })
+        .fullScreenCover(isPresented: $gameViewIsPresented) {
+            MainGameView(isPresented: $gameViewIsPresented).environmentObject(gameModel!)
+        }
     }
+    
+    
+    private func startGame() {
+        let gameModel = GameModel()
+        
+        gameModel.mainPlayer = UserPlayerController(name: name, id: 0)
+        gameModel.startGame()
+        
+        self.gameModel = gameModel
+        
+        gameViewIsPresented = true
+    }
+    
 }
 
 //struct ContentView_Previews: PreviewProvider {

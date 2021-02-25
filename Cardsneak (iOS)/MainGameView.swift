@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MainGameView: View {
     
+    @Binding var isPresented: Bool
+    
     @EnvironmentObject var gameModel: GameModel
     
     @State private var isShowingMenu = false
@@ -56,6 +58,7 @@ struct MainGameView: View {
             ActionSheet(title: Text("Menu"), buttons: [
                 .destructive(Text("End Game")) {
                     gameModel.endGame()
+                    isPresented = false
                 },
                 .cancel(Text("Close"))
             ])
@@ -65,7 +68,10 @@ struct MainGameView: View {
 }
 
 struct MainGameView_Previews: PreviewProvider {
+    
+    @State private static var isPresented = true
+    
     static var previews: some View {
-        MainGameView()
+        MainGameView(isPresented: $isPresented)
     }
 }

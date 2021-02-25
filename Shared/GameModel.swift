@@ -22,7 +22,7 @@ class GameModel: ObservableObject {
     var mainPlayer: UserPlayerController?
     
     @Published var playerCarousel = Carousel<Int>()
-    var players = [PlayerController]()
+    var players = [Player]()
     var rankCarousel = Carousel(PlayingCard.Rank.allCases)
     var turns = [Turn]()
     var stack: [PlayingCard] {
@@ -33,18 +33,16 @@ class GameModel: ObservableObject {
         }
     }
     
-    @Published var isInProgress = false
-    
     var allHaveCards: Bool {
         players.allSatisfy { !$0.cards.isEmpty }
     }
     
     
     enum GameState {
-        case deal, discard, challenge, collection
+        case loading, deal, discard, challenge, collection, over
     }
     
-    @Published var state = GameState.deal
+    @Published var state = GameState.loading
     
     
     func configurePlayers() {
@@ -61,15 +59,19 @@ class GameModel: ObservableObject {
     }
     
     func dealCards() {
+        state = .deal
         print("Dealing cards…")
         
         var cards = Deck().shuffled().cards
+        
+        print("Created deck with \(cards.count) cards.")
         
         while !cards.isEmpty {
             let card = cards.popLast()!
             
             if let index = players.firstIndex(where: { $0.id == playerCarousel.next() }) {
                 players[index].accept(card)
+                print("Player \(players[index].id) Card Count: \(players[index].cards.count)")
             }
         }
         
@@ -78,7 +80,6 @@ class GameModel: ObservableObject {
     
     func startGame() {
         print("Game starting")
-        isInProgress = true
         
         configurePlayers()
         dealCards()
@@ -90,9 +91,13 @@ class GameModel: ObservableObject {
     }
     
     func startTurn() {
+        let player = playerCarousel.next()
+        let rank = rankCarousel.next()
+        print("Turn: Player \(player), Rank: \(rank)")
+        
         players
-            .first { $0.id == playerCarousel.next() }?
-            .getPlay(rank: rankCarousel.next(), handler: receivePlay)
+            .first { $0.id == player }!
+            .getPlay(rank: rank, handler: receivePlay)
     }
     
     func receivePlay(cards: [PlayingCard]) {
@@ -107,8 +112,15 @@ class GameModel: ObservableObject {
         )
         turns.append(turn)
         
+        finish(turn)
+    }
+    
+    func finish(_ turn: Turn) {
         let currentPlayerId = playerCarousel.currentElement
         let currentPlayer = players.first { $0.id == currentPlayerId }!
+        
+        state = .challenge
+        print("Challenging open")
         
         players
             .filter { $0.id != currentPlayerId }
@@ -120,13 +132,11 @@ class GameModel: ObservableObject {
                 }
             }
         
-        //                    print("No challengers. You're safe, \(player.name).")
-        
         if allHaveCards {
             startTurn()
             
         } else {
-            gameOver()
+            endGame()
         }
     }
     
@@ -140,8 +150,7 @@ class GameModel: ObservableObject {
         print("Player \(playerId) challenge succeeded.")
         
         state = .collection
-        
-        print("Collecting…")
+        print("Challenging closed.\nCollecting…")
         
         executeChallenge(playerId: playerId)
         
@@ -163,13 +172,8 @@ class GameModel: ObservableObject {
     }
     
     func endGame() {
-        print("Game ended")
-        isInProgress = false
-    }
-    
-    
-    func gameOver() {
         print("Game over")
-        isInProgress = false
+        state = .over
     }
+    
 }

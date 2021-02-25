@@ -31,6 +31,10 @@
 		C1AB814925D265B7006B1940 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814825D265B7006B1940 /* Deck.swift */; };
 		C1AB814B25D26CB1006B1940 /* Turn.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814A25D26CB1006B1940 /* Turn.swift */; };
 		C1AB814D25D26CC8006B1940 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814C25D26CC8006B1940 /* GameModel.swift */; };
+		C1C57A6525E77FBA00908DD8 /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6425E77FBA00908DD8 /* AIPlayer.swift */; };
+		C1C57A6725E77FC600908DD8 /* UserPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6625E77FC600908DD8 /* UserPlayer.swift */; };
+		C1C57A6825E77FD000908DD8 /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6425E77FBA00908DD8 /* AIPlayer.swift */; };
+		C1C57A6925E77FD000908DD8 /* UserPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6625E77FC600908DD8 /* UserPlayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +70,8 @@
 		C1AB814825D265B7006B1940 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		C1AB814A25D26CB1006B1940 /* Turn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Turn.swift; sourceTree = "<group>"; };
 		C1AB814C25D26CC8006B1940 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
+		C1C57A6425E77FBA00908DD8 /* AIPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPlayer.swift; sourceTree = "<group>"; };
+		C1C57A6625E77FC600908DD8 /* UserPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +120,8 @@
 		C189A99225D45D8C00CCD8A1 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				C1C57A6425E77FBA00908DD8 /* AIPlayer.swift */,
+				C1C57A6625E77FC600908DD8 /* UserPlayer.swift */,
 				C1AB814A25D26CB1006B1940 /* Turn.swift */,
 				C1AB814C25D26CC8006B1940 /* GameModel.swift */,
 				C1AB814825D265B7006B1940 /* Deck.swift */,
@@ -249,9 +257,11 @@
 				C189A99325D45DA200CCD8A1 /* Deck.swift in Sources */,
 				C189A99425D45DA200CCD8A1 /* GameModel.swift in Sources */,
 				C189A99B25D45DF100CCD8A1 /* GameSetupScreen.swift in Sources */,
+				C1C57A6925E77FD000908DD8 /* UserPlayer.swift in Sources */,
 				C189A99825D45DA200CCD8A1 /* PlayingCard.swift in Sources */,
 				C188C6EB25DA59250018E892 /* PlayerView.swift in Sources */,
 				C15FC90125D34542009346A2 /* ContentView.swift in Sources */,
+				C1C57A6825E77FD000908DD8 /* AIPlayer.swift in Sources */,
 				C189A99525D45DA200CCD8A1 /* Player.swift in Sources */,
 				C189A99725D45DA200CCD8A1 /* Carousel.swift in Sources */,
 				C189A99625D45DA200CCD8A1 /* Turn.swift in Sources */,
@@ -270,6 +280,8 @@
 				C1AB814725D205E8006B1940 /* Carousel.swift in Sources */,
 				C1AB814D25D26CC8006B1940 /* GameModel.swift in Sources */,
 				C1AB813A25D1E889006B1940 /* main.swift in Sources */,
+				C1C57A6725E77FC600908DD8 /* UserPlayer.swift in Sources */,
+				C1C57A6525E77FBA00908DD8 /* AIPlayer.swift in Sources */,
 				C1AB814B25D26CB1006B1940 /* Turn.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
