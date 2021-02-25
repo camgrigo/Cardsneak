@@ -20,14 +20,14 @@ struct PlayerView: View {
     var body: some View {
         if userPlayerController.state == .decidingChallenge {
             ChallengePicker { shouldChallenge in
-                _ = gameModel.receiveChallenge(playerId: userPlayerController.player.id)
+                _ = gameModel.receiveChallenge(playerId: userPlayerController.id)
             }
             
         } else {
                 VStack {
                     ScrollView(.horizontal) {
                         LazyHStack {
-                            ForEach(userPlayerController.player.cards) { card in
+                            ForEach(userPlayerController.cards) { card in
                                 if userPlayerController.state == .selectingCards {
                                     
                                     if let index = selectedCards.firstIndex(of: card) {

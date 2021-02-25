@@ -72,8 +72,7 @@ struct ContentView: View {
                 StylizedTextField(title: "Player name", text: $name)
                     .padding()
                 Button(action: {
-                    gameModel.mainPlayer = UserPlayerController(player: Player(name: name, id: 0))
-                    
+                    gameModel.mainPlayer = UserPlayerController(name: name, id: 0)
                     gameModel.startGame()
                 }) {
                     startButton

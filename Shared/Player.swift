@@ -7,15 +7,7 @@
 
 import Foundation
 
-struct Player {
-    let name: String
-    let id: Int
-    var cards = [PlayingCard]()
-}
-
 protocol PlayerController {
-    
-    var player: Player { get set }
     
     var name: String { get }
     var id: Int { get }
@@ -33,11 +25,11 @@ protocol PlayerController {
 extension PlayerController {
     
     mutating func accept(_ cards: [PlayingCard]) {
-        player.cards.append(contentsOf: cards)
+        self.cards.append(contentsOf: cards)
     }
     
     mutating func accept(_ cards: PlayingCard...) {
-        player.cards.append(contentsOf: cards)
+        self.cards.append(contentsOf: cards)
     }
     
 }
@@ -49,28 +41,29 @@ class AIPlayerController: PlayerController {
     
     var cards = [PlayingCard]()
     
-    var player: Player
     
-    private let caution = (0...8).randomElement()!
-    
-    init(player: Player) {
-        self.player = player
+    init(name: String, id: Int) {
+        self.name = name
+        self.id = id
     }
     
     
+    private let caution = (0...8).randomElement()!
+    
+    
     func getPlay(rank: PlayingCard.Rank, handler: @escaping ([PlayingCard]) -> Void) {
-        var discard = player.cards.filter { $0.rank == rank }
+        var discard = cards.filter { $0.rank == rank }
         
         if discard.isEmpty {
             discard.append(
                 contentsOf: (0..<(1...2).randomElement()!)
-                    .map { _ in player.cards.popRandomElement() }
+                    .map { _ in self.cards.popRandomElement() }
                     .compactMap { $0 }
             )
         }
         
         // If not cautious, add an extra card
-        if let card = player.cards.popRandomElement(),
+        if let card = cards.popRandomElement(),
            caution < 5 && discard.count < 3 {
             discard.append(card)
         }
@@ -95,18 +88,17 @@ class AIPlayerController: PlayerController {
     }
     
     private func cardCountConfidenceScore() -> Int {
-        Int((max(0, 20 - player.cards.count) / 20) * 10)
+        Int((max(0, 20 - cards.count) / 20) * 10)
     }
     
     private func nextTurnProjection(nextRank: PlayingCard.Rank) -> Int {
-        let matches = player.cards.filter { $0.rank == nextRank }
-        
-        return Int((matches.count / 4) * 10)
+        Int((cards.filter { $0.rank == nextRank }.count / 4) * 10)
     }
     
 }
 
 class UserPlayerController: PlayerController, ObservableObject {
+    
     let name: String
     
     let id: Int
@@ -119,13 +111,13 @@ class UserPlayerController: PlayerController, ObservableObject {
     }
     
     
-    var player: Player
     
     @Published var state = State.viewing
     
     
-    init(player: Player) {
-        self.player = player
+    init(name: String, id: Int) {
+        self.name = name
+        self.id = id
     }
     
     

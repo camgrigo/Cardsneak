@@ -36,7 +36,7 @@ class GameModel: ObservableObject {
     @Published var isInProgress = false
     
     var allHaveCards: Bool {
-        players.allSatisfy { !$0.player.cards.isEmpty }
+        players.allSatisfy { !$0.cards.isEmpty }
     }
     
     
@@ -50,14 +50,14 @@ class GameModel: ObservableObject {
     func configurePlayers() {
         players = [
             mainPlayer!,
-            AIPlayerController(player: Player(name: nameGenerator.generate(), id: 1)),
-            AIPlayerController(player: Player(name: nameGenerator.generate(), id: 2)),
-            AIPlayerController(player: Player(name: nameGenerator.generate(), id: 3)),
-            AIPlayerController(player: Player(name: nameGenerator.generate(), id: 4))
+            AIPlayerController(name: nameGenerator.generate(), id: 1),
+            AIPlayerController(name: nameGenerator.generate(), id: 2),
+            AIPlayerController(name: nameGenerator.generate(), id: 3),
+            AIPlayerController(name: nameGenerator.generate(), id: 4)
         ]
-        playerCarousel = Carousel(players.map { $0.player.id })
+        playerCarousel = Carousel(players.map { $0.id })
         
-        print(players.map { "\($0.player.id): \($0.player.name)" })
+        print(players.map { "\($0.id): \($0.name)" })
     }
     
     func dealCards() {
@@ -68,12 +68,12 @@ class GameModel: ObservableObject {
         while !cards.isEmpty {
             let card = cards.popLast()!
             
-            if let index = players.firstIndex(where: { $0.player.id == playerCarousel.next() }) {
+            if let index = players.firstIndex(where: { $0.id == playerCarousel.next() }) {
                 players[index].accept(card)
             }
         }
         
-        print(players.map { "Player \($0.player.id) Card Count: \($0.player.cards.count)" })
+        print(players.map { "Player \($0.id) Card Count: \($0.cards.count)" })
     }
     
     func startGame() {
@@ -91,7 +91,7 @@ class GameModel: ObservableObject {
     
     func startTurn() {
         players
-            .first { $0.player.id == playerCarousel.next() }?
+            .first { $0.id == playerCarousel.next() }?
             .getPlay(rank: rankCarousel.next(), handler: receivePlay)
     }
     
@@ -108,14 +108,14 @@ class GameModel: ObservableObject {
         turns.append(turn)
         
         let currentPlayerId = playerCarousel.currentElement
-        let currentPlayer = players.first { $0.player.id == currentPlayerId }!
+        let currentPlayer = players.first { $0.id == currentPlayerId }!
         
         players
-            .filter { $0.player.id != currentPlayerId }
+            .filter { $0.id != currentPlayerId }
             .forEach { playerController in
-                playerController.shouldChallenge(player: (playerId: currentPlayerId, cardCount: currentPlayer.player.cards.count), rank: rankCarousel.currentElement) { isChallenging in
+                playerController.shouldChallenge(player: (playerId: currentPlayerId, cardCount: currentPlayer.cards.count), rank: rankCarousel.currentElement) { isChallenging in
                     if isChallenging, let lastTurn = self.turns.last, lastTurn.id == turn.id {
-                        _ = self.receiveChallenge(playerId: playerController.player.id)
+                        _ = self.receiveChallenge(playerId: playerController.id)
                     }
                 }
             }
@@ -155,25 +155,21 @@ class GameModel: ObservableObject {
         
         turns.removeAll()
         
-        let index = players.firstIndex { $0.player.id == recipientId }!
+        let index = players.firstIndex { $0.id == recipientId }!
         
         players[index].accept(cards)
         
-        print("Player \(players[index].player.name) gets \(cards.count) card(s).")
+        print("Player \(players[index].name) gets \(cards.count) card(s).")
     }
     
     func endGame() {
         print("Game ended")
-        
         isInProgress = false
     }
     
     
     func gameOver() {
         print("Game over")
-        
         isInProgress = false
-        //        print("\n\nThanks for playing!\n")
-        //        startGame(player: getPlayer(prompt: "Play again? Enter your name:"))
     }
 }

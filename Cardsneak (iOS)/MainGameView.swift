@@ -28,9 +28,9 @@ struct MainGameView: View {
                     Text("\("Cameron")'s Turn")
                     VStack {
                         HStack {
-                            CardStackView(cards: gameModel.players[1].player.cards)
+                            CardStackView(cards: gameModel.players[1].cards)
                             Spacer()
-                            CardStackView(cards: gameModel.players[2].player.cards)
+                            CardStackView(cards: gameModel.players[2].cards)
                         }
                         HStack {
                             Spacer()
@@ -38,9 +38,9 @@ struct MainGameView: View {
                             Spacer()
                         }
                         HStack {
-                            CardStackView(cards: gameModel.players[3].player.cards)
+                            CardStackView(cards: gameModel.players[3].cards)
                             Spacer()
-                            CardStackView(cards: gameModel.players[4].player.cards)
+                            CardStackView(cards: gameModel.players[4].cards)
                         }
                     }
                     PlayerView(userPlayerController: gameModel.mainPlayer!, gameModel: gameModel) {
