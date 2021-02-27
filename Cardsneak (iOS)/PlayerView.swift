@@ -54,13 +54,23 @@ struct PlayerView: View {
             }
             
             if userPlayer.state == .selectingCards {
-                Button("Done") {
+                Button("Play") {
                     submitCards(selectedCards)
                     selectedCards.removeAll()
                 }
+                .disabled(selectedCards.count < 1)
+            }
+            
+            
+            if userPlayer.canChallenge {
+                Button("Challenge", action: challenge)
             }
         }
         .padding(.vertical)
+    }
+    
+    private func challenge() {
+        _ = gameModel.receiveChallenge(playerId: userPlayer.id)
     }
     
 }

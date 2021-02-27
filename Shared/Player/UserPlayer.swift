@@ -15,9 +15,10 @@ class UserPlayer: Player, ObservableObject {
     
     var cards = [PlayingCard]()
     
+    @Published var canChallenge = false
     
     enum State {
-        case viewing, selectingCards, decidingChallenge
+        case viewing, selectingCards
     }
     
     
@@ -37,8 +38,8 @@ class UserPlayer: Player, ObservableObject {
     }
     
     func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: @escaping (Bool) -> Void) {
-        print("User deciding whether to challenge…")
-        state = .decidingChallenge
+        print("User may challenge…")
+        canChallenge = true
     }
     
 }

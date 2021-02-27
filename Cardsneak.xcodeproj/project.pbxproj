@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		C1479FA425EA220600722F6F /* PlayersEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1479FA325EA220600722F6F /* PlayersEditor.swift */; };
+		C1479FA625EA301100722F6F /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1479FA525EA301100722F6F /* Player.swift */; };
+		C1479FA825EA302000722F6F /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1479FA725EA302000722F6F /* AIPlayer.swift */; };
+		C1479FAA25EA303500722F6F /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1479FA525EA301100722F6F /* Player.swift */; };
+		C1479FAB25EA303500722F6F /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1479FA725EA302000722F6F /* AIPlayer.swift */; };
 		C156540225DB33AC00CB0464 /* CardStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C156540125DB33AC00CB0464 /* CardStackView.swift */; };
 		C15FC8FF25D34541009346A2 /* Cardsneak__iOS_App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FC8FE25D34541009346A2 /* Cardsneak__iOS_App.swift */; };
 		C15FC90125D34542009346A2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FC90025D34542009346A2 /* ContentView.swift */; };
@@ -18,7 +22,6 @@
 		C188C6EB25DA59250018E892 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C188C6EA25DA59250018E892 /* PlayerView.swift */; };
 		C189A99325D45DA200CCD8A1 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814825D265B7006B1940 /* Deck.swift */; };
 		C189A99425D45DA200CCD8A1 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814C25D26CC8006B1940 /* GameModel.swift */; };
-		C189A99525D45DA200CCD8A1 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814425D1FACE006B1940 /* Player.swift */; };
 		C189A99625D45DA200CCD8A1 /* Turn.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814A25D26CB1006B1940 /* Turn.swift */; };
 		C189A99725D45DA200CCD8A1 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814625D205E8006B1940 /* Carousel.swift */; };
 		C189A99825D45DA200CCD8A1 /* PlayingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814225D1F506006B1940 /* PlayingCard.swift */; };
@@ -27,14 +30,11 @@
 		C1AB813A25D1E889006B1940 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB813925D1E889006B1940 /* main.swift */; };
 		C1AB814125D1EC51006B1940 /* NameGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814025D1EC51006B1940 /* NameGenerator.swift */; };
 		C1AB814325D1F506006B1940 /* PlayingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814225D1F506006B1940 /* PlayingCard.swift */; };
-		C1AB814525D1FACE006B1940 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814425D1FACE006B1940 /* Player.swift */; };
 		C1AB814725D205E8006B1940 /* Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814625D205E8006B1940 /* Carousel.swift */; };
 		C1AB814925D265B7006B1940 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814825D265B7006B1940 /* Deck.swift */; };
 		C1AB814B25D26CB1006B1940 /* Turn.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814A25D26CB1006B1940 /* Turn.swift */; };
 		C1AB814D25D26CC8006B1940 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AB814C25D26CC8006B1940 /* GameModel.swift */; };
-		C1C57A6525E77FBA00908DD8 /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6425E77FBA00908DD8 /* AIPlayer.swift */; };
 		C1C57A6725E77FC600908DD8 /* UserPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6625E77FC600908DD8 /* UserPlayer.swift */; };
-		C1C57A6825E77FD000908DD8 /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6425E77FBA00908DD8 /* AIPlayer.swift */; };
 		C1C57A6925E77FD000908DD8 /* UserPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6625E77FC600908DD8 /* UserPlayer.swift */; };
 		C1F9002525E8CA0F0006ED33 /* TitleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F9002425E8CA0F0006ED33 /* TitleCard.swift */; };
 /* End PBXBuildFile section */
@@ -53,6 +53,8 @@
 
 /* Begin PBXFileReference section */
 		C1479FA325EA220600722F6F /* PlayersEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersEditor.swift; sourceTree = "<group>"; };
+		C1479FA525EA301100722F6F /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		C1479FA725EA302000722F6F /* AIPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPlayer.swift; sourceTree = "<group>"; };
 		C156540125DB33AC00CB0464 /* CardStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackView.swift; sourceTree = "<group>"; };
 		C15FC8FC25D34541009346A2 /* Cardsneak (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cardsneak (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15FC8FE25D34541009346A2 /* Cardsneak__iOS_App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardsneak__iOS_App.swift; sourceTree = "<group>"; };
@@ -68,12 +70,10 @@
 		C1AB813925D1E889006B1940 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		C1AB814025D1EC51006B1940 /* NameGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameGenerator.swift; sourceTree = "<group>"; };
 		C1AB814225D1F506006B1940 /* PlayingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCard.swift; sourceTree = "<group>"; };
-		C1AB814425D1FACE006B1940 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		C1AB814625D205E8006B1940 /* Carousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Carousel.swift; sourceTree = "<group>"; };
 		C1AB814825D265B7006B1940 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		C1AB814A25D26CB1006B1940 /* Turn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Turn.swift; sourceTree = "<group>"; };
 		C1AB814C25D26CC8006B1940 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
-		C1C57A6425E77FBA00908DD8 /* AIPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPlayer.swift; sourceTree = "<group>"; };
 		C1C57A6625E77FC600908DD8 /* UserPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlayer.swift; sourceTree = "<group>"; };
 		C1F9002425E8CA0F0006ED33 /* TitleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,6 +96,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C1479FAC25EA303B00722F6F /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				C1C57A6625E77FC600908DD8 /* UserPlayer.swift */,
+				C1479FA525EA301100722F6F /* Player.swift */,
+				C1479FA725EA302000722F6F /* AIPlayer.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
 		C15FC8FD25D34541009346A2 /* Cardsneak (iOS) */ = {
 			isa = PBXGroup;
 			children = (
@@ -126,13 +136,11 @@
 		C189A99225D45D8C00CCD8A1 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				C1C57A6425E77FBA00908DD8 /* AIPlayer.swift */,
-				C1C57A6625E77FC600908DD8 /* UserPlayer.swift */,
 				C1AB814A25D26CB1006B1940 /* Turn.swift */,
+				C1479FAC25EA303B00722F6F /* Player */,
 				C1AB814C25D26CC8006B1940 /* GameModel.swift */,
 				C1AB814825D265B7006B1940 /* Deck.swift */,
 				C1AB814225D1F506006B1940 /* PlayingCard.swift */,
-				C1AB814425D1FACE006B1940 /* Player.swift */,
 				C1AB814625D205E8006B1940 /* Carousel.swift */,
 				C1AB814025D1EC51006B1940 /* NameGenerator.swift */,
 			);
@@ -268,11 +276,11 @@
 				C189A99825D45DA200CCD8A1 /* PlayingCard.swift in Sources */,
 				C188C6EB25DA59250018E892 /* PlayerView.swift in Sources */,
 				C15FC90125D34542009346A2 /* ContentView.swift in Sources */,
-				C1C57A6825E77FD000908DD8 /* AIPlayer.swift in Sources */,
-				C189A99525D45DA200CCD8A1 /* Player.swift in Sources */,
 				C189A99725D45DA200CCD8A1 /* Carousel.swift in Sources */,
 				C189A99625D45DA200CCD8A1 /* Turn.swift in Sources */,
+				C1479FA625EA301100722F6F /* Player.swift in Sources */,
 				C15FC8FF25D34541009346A2 /* Cardsneak__iOS_App.swift in Sources */,
+				C1479FA825EA302000722F6F /* AIPlayer.swift in Sources */,
 				C1479FA425EA220600722F6F /* PlayersEditor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,15 +289,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1479FAB25EA303500722F6F /* AIPlayer.swift in Sources */,
 				C1AB814925D265B7006B1940 /* Deck.swift in Sources */,
-				C1AB814525D1FACE006B1940 /* Player.swift in Sources */,
 				C1AB814125D1EC51006B1940 /* NameGenerator.swift in Sources */,
 				C1AB814325D1F506006B1940 /* PlayingCard.swift in Sources */,
 				C1AB814725D205E8006B1940 /* Carousel.swift in Sources */,
 				C1AB814D25D26CC8006B1940 /* GameModel.swift in Sources */,
 				C1AB813A25D1E889006B1940 /* main.swift in Sources */,
 				C1C57A6725E77FC600908DD8 /* UserPlayer.swift in Sources */,
-				C1C57A6525E77FBA00908DD8 /* AIPlayer.swift in Sources */,
+				C1479FAA25EA303500722F6F /* Player.swift in Sources */,
 				C1AB814B25D26CB1006B1940 /* Turn.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

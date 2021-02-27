@@ -1,40 +1,13 @@
 //
-//  Player.swift
+//  AIPlayer.swift
 //  Cardsneak
 //
-//  Created by Cameron Grigoriadis on 2/8/21.
+//  Created by Cameron Grigoriadis on 2/24/21.
 //
 
 import Foundation
 
-protocol PlayerController {
-    
-    var name: String { get }
-    var id: Int { get }
-    var cards: [PlayingCard] { get set }
-    
-    
-    mutating func accept(_ cards: PlayingCard...)
-    mutating func accept(_ cards: [PlayingCard])
-    
-    func getPlay(rank: PlayingCard.Rank, handler: @escaping ([PlayingCard]) -> Void)
-    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: @escaping (Bool) -> Void)
-
-}
-
-extension PlayerController {
-    
-    mutating func accept(_ cards: [PlayingCard]) {
-        self.cards.append(contentsOf: cards)
-    }
-    
-    mutating func accept(_ cards: PlayingCard...) {
-        self.cards.append(contentsOf: cards)
-    }
-    
-}
-
-class AIPlayerController: PlayerController {
+class AIPlayer: Player {
     let name: String
     
     let id: Int
@@ -93,40 +66,6 @@ class AIPlayerController: PlayerController {
     
     private func nextTurnProjection(nextRank: PlayingCard.Rank) -> Int {
         Int((cards.filter { $0.rank == nextRank }.count / 4) * 10)
-    }
-    
-}
-
-class UserPlayerController: PlayerController, ObservableObject {
-    
-    let name: String
-    
-    let id: Int
-    
-    var cards = [PlayingCard]()
-    
-    
-    enum State {
-        case viewing, selectingCards, decidingChallenge
-    }
-    
-    
-    
-    @Published var state = State.viewing
-    
-    
-    init(name: String, id: Int) {
-        self.name = name
-        self.id = id
-    }
-    
-    
-    func getPlay(rank: PlayingCard.Rank, handler: @escaping ([PlayingCard]) -> Void) {
-        state = .selectingCards
-    }
-    
-    func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: @escaping (Bool) -> Void) {
-        state = .decidingChallenge
     }
     
 }

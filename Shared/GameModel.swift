@@ -126,6 +126,11 @@ class GameModel: ObservableObject {
                 }
             }
         
+        precondition(
+            players.reduce([]) { $0 + $1.cards }.count + stack.count ==
+                PlayingCard.Rank.allCases.count * PlayingCard.Suit.allCases.count
+        )
+        
         if allHaveCards {
             startTurn()
             
