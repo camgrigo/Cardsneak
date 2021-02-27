@@ -13,55 +13,50 @@ struct MainGameView: View {
     
     @EnvironmentObject var gameModel: GameModel
     
-    @State private var isShowingMenu = false
-    
-    private var menuButton: some View {
-        Button("Menu") {
-            isShowingMenu = true
-        }
+    var topViewPlayers: [Player] {
+        gameModel.players.filter { $0.id != gameModel.userPlayer.id }
     }
+    
     
     var body: some View {
         NavigationView {
             ZStack {
-                Color(#colorLiteral(red: 0, green: 1, blue: 0.7009260655, alpha: 1))
-                    .edgesIgnoringSafeArea(.all)
+                //                Color(#colorLiteral(red: 0, green: 1, blue: 0.7009260655, alpha: 1))
+                //                    .edgesIgnoringSafeArea(.all)
                 VStack {
-                    Text("\("Cameron")'s Turn")
-                    VStack {
-                        HStack {
-                            Text("\(gameModel.players.first { $0.id == 1 }?.cards.count ?? 0)")
-                            Spacer()
-                            Text("\(gameModel.players.first { $0.id == 2 }?.cards.count ?? 0)")
-                        }
-                        HStack {
-                            Spacer()
-                            CardStackView(cards: gameModel.stack, showsCount: true)
-                            Spacer()
-                        }
-                        HStack {
-                            Text("\(gameModel.players.first { $0.id == 3 }?.cards.count ?? 0)")
-                            Spacer()
-                            Text("\(gameModel.players.first { $0.id == 4 }?.cards.count ?? 0)")
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], alignment: .center, spacing: 10) {
+                        ForEach(topViewPlayers, id: \.id) { player in
+                            VStack {
+                                Text(player.name)
+                                    .font(.title3)
+                                    .multilineTextAlignment(.center)
+                                Text("\(player.cards.count)")
+                                    .font(.title)
+                                    .bold()
+                            }
+                            .padding()
+                            .background(Color(.secondarySystemBackground).cornerRadius(10))
+                            .padding()
                         }
                     }
-                    PlayerView(userPlayer: gameModel.mainPlayer, gameModel: gameModel) {
+                    PlayerView(userPlayer: gameModel.players[0] as! UserPlayer, gameModel: gameModel) {
                         gameModel.receivePlay(cards: $0)
                     }
                 }
             }
             .toolbar {
-                ToolbarItem { menuButton }
+                ToolbarItem {
+                    Menu {
+                        Button("End Game") {
+                            gameModel.endGame()
+                            isPresented = false
+                        }
+                    } label: {
+                        Image(systemName: "tray.full")
+                            .imageScale(.large)
+                    }
+                }
             }
-        }
-        .actionSheet(isPresented: $isShowingMenu) {
-            ActionSheet(title: Text("Menu"), buttons: [
-                .destructive(Text("End Game")) {
-                    gameModel.endGame()
-                    isPresented = false
-                },
-                .cancel(Text("Close"))
-            ])
         }
     }
     

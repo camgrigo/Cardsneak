@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C1479FA425EA220600722F6F /* PlayersEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1479FA325EA220600722F6F /* PlayersEditor.swift */; };
 		C156540225DB33AC00CB0464 /* CardStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C156540125DB33AC00CB0464 /* CardStackView.swift */; };
 		C15FC8FF25D34541009346A2 /* Cardsneak__iOS_App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FC8FE25D34541009346A2 /* Cardsneak__iOS_App.swift */; };
 		C15FC90125D34542009346A2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C15FC90025D34542009346A2 /* ContentView.swift */; };
@@ -35,6 +36,7 @@
 		C1C57A6725E77FC600908DD8 /* UserPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6625E77FC600908DD8 /* UserPlayer.swift */; };
 		C1C57A6825E77FD000908DD8 /* AIPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6425E77FBA00908DD8 /* AIPlayer.swift */; };
 		C1C57A6925E77FD000908DD8 /* UserPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C57A6625E77FC600908DD8 /* UserPlayer.swift */; };
+		C1F9002525E8CA0F0006ED33 /* TitleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F9002425E8CA0F0006ED33 /* TitleCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C1479FA325EA220600722F6F /* PlayersEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersEditor.swift; sourceTree = "<group>"; };
 		C156540125DB33AC00CB0464 /* CardStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStackView.swift; sourceTree = "<group>"; };
 		C15FC8FC25D34541009346A2 /* Cardsneak (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cardsneak (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C15FC8FE25D34541009346A2 /* Cardsneak__iOS_App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardsneak__iOS_App.swift; sourceTree = "<group>"; };
@@ -72,6 +75,7 @@
 		C1AB814C25D26CC8006B1940 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
 		C1C57A6425E77FBA00908DD8 /* AIPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIPlayer.swift; sourceTree = "<group>"; };
 		C1C57A6625E77FC600908DD8 /* UserPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlayer.swift; sourceTree = "<group>"; };
+		C1F9002425E8CA0F0006ED33 /* TitleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 				C15FC90725D34544009346A2 /* Info.plist */,
 				C15FC90425D34544009346A2 /* Preview Content */,
 				C188C6E825DA57200018E892 /* PlayingCardView.swift */,
+				C1F9002425E8CA0F0006ED33 /* TitleCard.swift */,
+				C1479FA325EA220600722F6F /* PlayersEditor.swift */,
 			);
 			path = "Cardsneak (iOS)";
 			sourceTree = "<group>";
@@ -251,6 +257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C188C04525D8D65E000BD3FE /* MainGameView.swift in Sources */,
+				C1F9002525E8CA0F0006ED33 /* TitleCard.swift in Sources */,
 				C156540225DB33AC00CB0464 /* CardStackView.swift in Sources */,
 				C188C6E925DA57200018E892 /* PlayingCardView.swift in Sources */,
 				C189A99925D45DA200CCD8A1 /* NameGenerator.swift in Sources */,
@@ -266,6 +273,7 @@
 				C189A99725D45DA200CCD8A1 /* Carousel.swift in Sources */,
 				C189A99625D45DA200CCD8A1 /* Turn.swift in Sources */,
 				C15FC8FF25D34541009346A2 /* Cardsneak__iOS_App.swift in Sources */,
+				C1479FA425EA220600722F6F /* PlayersEditor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,15 +8,15 @@
 
 import Foundation
 
-public class Carousel<Element>: Collection, ExpressibleByArrayLiteral {
+public class Carousel<Element>: Collection, ExpressibleByArrayLiteral, ObservableObject {
     
     public typealias Index = Int
     
     // MARK: - Properties
     
-    public var contents: [Element]
+    @Published public var contents: [Element]
     
-    var currentIndex: Index
+    @Published var currentIndex: Index
     
     public var currentElement: Element {
         return contents[currentIndex]
