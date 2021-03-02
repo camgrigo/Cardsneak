@@ -32,52 +32,62 @@ struct CardList: View {
 
 struct PlayerView: View {
     
-    @Namespace var namespace
-    
     @ObservedObject var userPlayer: UserPlayer
     
     @ObservedObject var gameModel: GameModel
     
     @State private var selectedCards = CardStack()
     
+    var namespace: Namespace.ID
+    
     let submitCards: ([PlayingCard]) -> Void
     
     
+    private var submitButton: some View {
+        Button {
+            print("Selected:", selectedCards, "User:", userPlayer.cards)
+            precondition(Set(selectedCards).isDisjoint(with: userPlayer.cards))
+            submitCards(selectedCards.empty())
+        } label: {
+            Image(systemName: "arrow.up.circle.fill").font(.largeTitle)
+        }
+        .padding()
+        .disabled(selectedCards.isEmpty)
+    }
+    
     var body: some View {
+        
         VStack {
             if userPlayer.state == .selectingCards {
-                HStack {
+                VStack {
+                    submitButton
                     CardList(stack: selectedCards, namespace: namespace) {
+                        print($0)
                         userPlayer.cards.append(selectedCards.pop(id: $0)!)
                     }
-                    Button {
-                        precondition(Set(selectedCards).isDisjoint(with: userPlayer.cards))
-                        submitCards(selectedCards.empty())
-                    } label: {
-                        Image(systemName: "arrow.up.circle.fill").font(.largeTitle)
-                            .foregroundColor(.blue)
-                    }
-                    .disabled(selectedCards.isEmpty)
                 }
-                .background(Color(.secondarySystemBackground))
-                .scaleEffect()
+                .background(Color.blue.opacity(0.2).cornerRadius(8))
+                .padding()
             }
             CardList(stack: userPlayer.cards, namespace: namespace) {
+                print($0)
                 guard userPlayer.state == .selectingCards &&
-                      selectedCards.count < PlayingCard.suitCount else { return }
+                        selectedCards.count < PlayingCard.suitCount else { return }
                 
                 selectedCards.append(userPlayer.cards.pop(id: $0)!)
             }
-            .background(Color(.tertiarySystemBackground))
+            
             HStack {
-                if userPlayer.canChallenge {
+                
                     RoundedButton("Challenge", action: challenge)
-                }
+                        .disabled(!userPlayer.canChallenge)
+                
             }
             .padding()
-            .background(Color(.tertiarySystemBackground))
+            
         }
         .padding(.vertical)
+        
     }
     
     private func challenge() {

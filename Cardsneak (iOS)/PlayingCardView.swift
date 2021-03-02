@@ -30,8 +30,8 @@ struct PlayingCardView: View {
     private var background: some View {
         RoundedRectangle(cornerRadius: 12)
             .fill(gradient)
-            .aspectRatio(0.7, contentMode: .fit)
-            .frame(width: 90)
+//            .aspectRatio(0.7, contentMode: .fit)
+            .frame(width: 90, height: 130)
             .shadow(radius: 2)
     }
     

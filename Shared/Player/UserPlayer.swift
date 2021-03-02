@@ -5,7 +5,7 @@
 //  Created by Cameron Grigoriadis on 2/24/21.
 //
 
-import Foundation
+import SwiftUI
 
 class UserPlayer: Player, ObservableObject {
     
@@ -34,12 +34,16 @@ class UserPlayer: Player, ObservableObject {
     
     func getPlay(rank: PlayingCard.Rank, handler: @escaping ([PlayingCard]) -> Void) {
         print("User selecting cards…")
-        state = .selectingCards
+        withAnimation {
+            state = .selectingCards
+        }
     }
     
     func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: @escaping (Bool) -> Void) {
         print("User may challenge…")
-        canChallenge = true
+        withAnimation {
+            canChallenge = true
+        }
     }
     
 }

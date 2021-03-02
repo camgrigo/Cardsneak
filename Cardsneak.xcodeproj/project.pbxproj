@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C11EE48F25EE170900162C14 /* PlayerHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11EE48E25EE170900162C14 /* PlayerHUD.swift */; };
 		C139AA4925EB13AA00BBDE86 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C139AA4825EB13AA00BBDE86 /* MainMenuView.swift */; };
 		C139AA4B25EB1A8700BBDE86 /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C139AA4A25EB1A8700BBDE86 /* RoundedButton.swift */; };
 		C1479FA425EA220600722F6F /* PlayersEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1479FA325EA220600722F6F /* PlayersEditor.swift */; };
@@ -54,6 +55,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C11EE48E25EE170900162C14 /* PlayerHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHUD.swift; sourceTree = "<group>"; };
 		C139AA4825EB13AA00BBDE86 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		C139AA4A25EB1A8700BBDE86 /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		C1479FA325EA220600722F6F /* PlayersEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersEditor.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				C1F9002425E8CA0F0006ED33 /* TitleCard.swift */,
 				C1479FA325EA220600722F6F /* PlayersEditor.swift */,
 				C139AA4A25EB1A8700BBDE86 /* RoundedButton.swift */,
+				C11EE48E25EE170900162C14 /* PlayerHUD.swift */,
 			);
 			path = "Cardsneak (iOS)";
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 				C189A99725D45DA200CCD8A1 /* Carousel.swift in Sources */,
 				C189A99625D45DA200CCD8A1 /* Turn.swift in Sources */,
 				C1479FA625EA301100722F6F /* Player.swift in Sources */,
+				C11EE48F25EE170900162C14 /* PlayerHUD.swift in Sources */,
 				C15FC8FF25D34541009346A2 /* Cardsneak__iOS_App.swift in Sources */,
 				C1479FA825EA302000722F6F /* AIPlayer.swift in Sources */,
 				C1479FA425EA220600722F6F /* PlayersEditor.swift in Sources */,

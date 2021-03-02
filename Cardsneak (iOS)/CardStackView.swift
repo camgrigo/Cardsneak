@@ -9,16 +9,17 @@ import SwiftUI
 
 struct CardStackView: View {
     
-    @Namespace var namespace
-    
     var cards: CardStack
     
     var showsCount: Bool
     
+    var namespace: Namespace.ID
     
-    init(cards: CardStack, showsCount: Bool = false) {
+    
+    init(cards: CardStack, showsCount: Bool = false, namespace: Namespace.ID) {
         self.cards = cards
         self.showsCount = showsCount
+        self.namespace = namespace
     }
     
     
@@ -26,7 +27,7 @@ struct CardStackView: View {
         VStack {
             ZStack {
                 ForEach(cards) { card in
-                    PlayingCardView(playingCard: card, isFaceDown: true)
+                    PlayingCardView(playingCard: card, isFaceDown: false)
                         .offset(y: CGFloat((cards.firstIndex(of: card) ?? 0) * 1))
                         .matchedGeometryEffect(id: card.id, in: namespace)
                 }

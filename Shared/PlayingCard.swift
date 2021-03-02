@@ -9,7 +9,20 @@ import Foundation
 import SwiftUI
 
 struct PlayingCard: Equatable, Hashable, Identifiable {
-    var id: String { "\(suit)\(rank)" }
+    var id: String {
+        let suitStr: String
+        switch suit {
+        case .club:
+            suitStr = "club"
+        case .diamond:
+            suitStr = "diamond"
+        case .spade:
+            suitStr = "spade"
+        case .heart:
+        suitStr = "heart"
+        }
+        return "\(suitStr)\(rank)"
+    }
     
     let suit: PlayingCard.Suit
     let rank: PlayingCard.Rank
