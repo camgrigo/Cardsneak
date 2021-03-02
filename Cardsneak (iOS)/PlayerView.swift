@@ -48,7 +48,7 @@ struct PlayerView: View {
             if userPlayer.state == .selectingCards {
                 HStack {
                     CardList(stack: selectedCards, namespace: namespace) {
-                        userPlayer.cards.push(selectedCards.pop(id: $0)!)
+                        userPlayer.cards.append(selectedCards.pop(id: $0)!)
                     }
                     Button {
                         precondition(Set(selectedCards).isDisjoint(with: userPlayer.cards))
@@ -66,7 +66,7 @@ struct PlayerView: View {
                 guard userPlayer.state == .selectingCards &&
                       selectedCards.count < PlayingCard.suitCount else { return }
                 
-                selectedCards.push(userPlayer.cards.pop(id: $0)!)
+                selectedCards.append(userPlayer.cards.pop(id: $0)!)
             }
             .background(Color(.tertiarySystemBackground))
             HStack {

@@ -26,30 +26,32 @@ class AIPlayer: Player {
     
     
     func getPlay(rank: PlayingCard.Rank, handler: @escaping ([PlayingCard]) -> Void) {
-        let discardStack = CardStack()
+        var discardStack = CardStack()
         
         let matches = cards.popAll { $0.rank == rank }
         
         discardStack
-            .push(matches.isEmpty ? getSneakCards(max: .random(in: 1...2)) : matches)
+            .append(
+                contentsOf: matches.isEmpty ? getSneakCards(max: .random(in: 1...2)) : matches
+            )
         
-
+        
         // If not cautious, add an extra card
         if !cards.isEmpty && caution < 5 && discardStack.count <= 2 {
-            discardStack.push(cards.popRandomElement()!)
+            discardStack.append(cards.popRandomElement()!)
         }
         
         let deadline: DispatchTime = .now() + [2, 3, 4].randomElement()!
         DispatchQueue.main.asyncAfter(deadline: deadline) {
             precondition(Set(discardStack).isDisjoint(with: self.cards))
-            handler(discardStack.empty())
+            handler(discardStack)
         }
     }
     
     private func getSneakCards(max: Int) -> [PlayingCard] {
         (0..<max)
-        .map { _ in self.cards.popRandomElement() }
-        .compactMap { $0 }
+            .map { _ in self.cards.popRandomElement() }
+            .compactMap { $0 }
     }
     
     func shouldChallenge(player: (playerId: Int, cardCount: Int), rank: PlayingCard.Rank, handler: @escaping (Bool) -> Void) {

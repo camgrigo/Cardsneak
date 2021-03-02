@@ -7,116 +7,112 @@
 
 import Foundation
 
-class CardStack: RandomAccessCollection {
+typealias CardStack = Array<PlayingCard>
+
+//struct CardStack: RandomAccessCollection {
     
-    typealias Index = Int
+//    typealias Index = Int
     
-    typealias Element = PlayingCard
+//    typealias Element = PlayingCard
     
     
-    private var contents = [Element]()
+//    private var contents = [Element]()
     
-    var startIndex: Index { contents.startIndex }
-    var endIndex: Index { contents.endIndex }
+//    var startIndex: Index { contents.startIndex }
+//    var endIndex: Index { contents.endIndex }
 
     
-    subscript(position: Int) -> Element {
-        get { contents[position] }
-    }
+//    subscript(position: Int) -> Element {
+//        get { contents[position] }
+//    }
 
     
-    func index(after i: Index) -> Index {
-        contents.index(after: i)
-    }
-    
-    
-    /// Creates a standard 52-card deck.
-    /// - Returns: A stack containing 52 cards
-    class func standardDeck() -> CardStack {
-        let stack = CardStack()
-        
-        stack.push(
-            PlayingCard.Suit.allCases.map { suit in
-                PlayingCard.Rank.allCases.map { rank in
-                    PlayingCard(suit: suit, rank: rank)
-                }
-            }
-            .flatMap { $0 }
-        )
-        
-        return stack
-    }
+//    func index(after i: Index) -> Index {
+//        contents.index(after: i)
+//    }
     
     
     /// Shuffles the stack of cards.
     /// - Returns: A stack of cards
-    func shuffle() -> CardStack {
-        contents.shuffle()
-        
-        return self
+//    mutating func shuffle() -> CardStack {
+//        contents.shuffle()
+//
+//        return self
+//    }
+
+    
+//
+//    mutating func pop() -> Element? {
+//        contents.removeLast()
+//    }
+//
+//    mutating func popFirst() -> Element? {
+//        contents.removeFirst()
+//    }
+    
+//    mutating func popRandomElement() -> Element? {
+//        contents.popRandomElement()
+//    }
+    
+    
+//}
+
+extension Array where Element == PlayingCard {
+    
+    /// Creates a standard 52-card deck.
+    /// - Returns: A stack containing 52 cards
+    static func standardDeck() -> CardStack {
+        PlayingCard.Suit.allCases.map { suit in
+            PlayingCard.Rank.allCases.map { rank in
+                PlayingCard(suit: suit, rank: rank)
+            }
+        }
+        .flatMap { $0 }
     }
     
+    
+    mutating func pushToBottom(_ card: PlayingCard) {
+        insert(card, at: startIndex)
+    }
+    
+    mutating func pushToBottom(_ cards: [PlayingCard]) {
+        insert(contentsOf: cards, at: startIndex)
+    }
+    
+    
     func deal(to players: inout [Player]) {
-        let carousel = Carousel(Array(0..<players.count))
+        var copy = self
+        let carousel = Carousel<Int>(Array<Int>(0..<players.count))
         
-        while let card = contents.popLast() {
-            players[carousel.next()].accept(card)
+        while let card = copy.popLast() {
+            players[carousel.next()].cards.append(card)
         }
     }
     
     
-    func push(_ card: PlayingCard) {
-        contents.append(card)
-    }
     
-    func push(_ cards: [PlayingCard]) {
-        contents.append(contentsOf: cards)
-    }
-    
-    func pushToBottom(_ card: PlayingCard) {
-        contents.insert(card, at: 0)
-    }
-    
-    func pushToBottom(_ cards: [PlayingCard]) {
-        contents.insert(contentsOf: cards, at: 0)
-    }
-    
-    
-    func pop() -> Element? {
-        contents.removeLast()
-    }
-    
-    func popFirst() -> Element? {
-        contents.removeFirst()
-    }
-    
-    func popRandomElement() -> Element? {
-        contents.popRandomElement()
-    }
-    
-    func pop(id: PlayingCard.ID) -> Element? {
-        guard let index = contents.firstIndex(where: { $0.id == id }) else { return nil }
+    mutating func pop(id: PlayingCard.ID) -> Element? {
+        if let index = firstIndex(where: { $0.id == id }) {
+            remove(at: index)
+            return self[index]
+        }
         
-        contents.remove(at: index)
-        
-        return contents[index]
+        return nil
     }
     
-    func popAll(where block: (Element) -> Bool) -> [Element] {
-        let partition = contents.partition(by: block)
-        
-        let popArray = Array(contents[partition...])
-        contents = Array(contents[..<partition])
+    mutating func popAll(where block: (Element) -> Bool) -> [Element] {
+        let partition = partition(by: block)
+        let popArray = Array(self[partition...])
+        self = Array(self[..<partition])
         
         return popArray
     }
     
     /// Empties the stack of all contents and returns them as an array.
     /// - Returns: The contents of the stack.
-    func empty() -> [PlayingCard] {
-        defer { contents.removeAll() }
-        
-        return contents
+    mutating func empty() -> [PlayingCard] {
+        defer { removeAll() }
+        return self
     }
     
 }

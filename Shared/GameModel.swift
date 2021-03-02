@@ -55,7 +55,7 @@ class GameModel: ObservableObject {
         
         CardStack
             .standardDeck()
-            .shuffle()
+            .shuffled()
             .deal(to: &players)
         
         print("Players:", players.reduce([]) { $0 + $1.cards }.count, " Stack:", stack.count)
@@ -156,7 +156,7 @@ class GameModel: ObservableObject {
         let recipientIndex = players.firstIndex { $0.id == recipientId }!
         let cards = stack
         
-        players[recipientIndex].accept(cards)
+        players[recipientIndex].cards.append(contentsOf: cards)
         
         turns.removeAll()
         
