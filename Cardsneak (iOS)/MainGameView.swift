@@ -7,15 +7,36 @@
 
 import SwiftUI
 
+struct PlayerHUD: View {
+    
+    let players: [Player]
+    
+    let currentPlayerId: Int
+    
+    var body: some View {
+        LazyVGrid(columns: [GridItem(), GridItem()]) {
+            ForEach(players, id: \.id) { player in
+                HStack {
+                    Text(player.name)
+                    Spacer()
+                    Text("\(player.cards.count)")
+                        .font(.system(.body, design: .rounded).bold())
+                }
+                .foregroundColor(player.id == currentPlayerId ? .white : .primary)
+                .padding()
+                .background((player.id == currentPlayerId ? .blue : Color(.secondarySystemBackground)).cornerRadius(10))
+            }
+        }
+        .padding()
+    }
+    
+}
+
 struct MainGameView: View {
     
     @Binding var isPresented: Bool
     
     @EnvironmentObject var gameModel: GameModel
-    
-    var topViewPlayers: [Player] {
-        gameModel.players.filter { $0.id != gameModel.userPlayer.id }
-    }
     
     
     var body: some View {
@@ -24,21 +45,15 @@ struct MainGameView: View {
                 //                Color(#colorLiteral(red: 0, green: 1, blue: 0.7009260655, alpha: 1))
                 //                    .edgesIgnoringSafeArea(.all)
                 VStack {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], alignment: .center, spacing: 10) {
-                        ForEach(topViewPlayers, id: \.id) { player in
-                            VStack {
-                                Text(player.name)
-                                    .font(.title3)
-                                    .multilineTextAlignment(.center)
-                                Text("\(player.cards.count)")
-                                    .font(.title)
-                                    .bold()
-                            }
-                            .padding()
-                            .background(Color(.secondarySystemBackground).cornerRadius(10))
-                            .padding()
-                        }
-                    }
+                    PlayerHUD(players: gameModel.players, currentPlayerId: gameModel.players[gameModel.turnCarousel.currentElement].id)
+                    
+                    Text("Rank \(gameModel.rankCarousel.currentElement.description)").font(.title)
+                    
+                    Text("\(gameModel.stack.count)")
+                        .font(.system(.largeTitle, design: .rounded).bold())
+                        .padding()
+                        .background(Color(.secondarySystemBackground).cornerRadius(20))
+                    
                     PlayerView(userPlayer: gameModel.players[0] as! UserPlayer, gameModel: gameModel) {
                         gameModel.receivePlay(cards: $0)
                     }

@@ -9,21 +9,26 @@ import SwiftUI
 
 struct CardStackView: View {
     
-    var cards: [PlayingCard]
+    @Namespace var namespace
+    
+    var cards: CardStack
     
     var showsCount: Bool
     
-    init(cards: [PlayingCard], showsCount: Bool = false) {
+    
+    init(cards: CardStack, showsCount: Bool = false) {
         self.cards = cards
         self.showsCount = showsCount
     }
     
+    
     var body: some View {
         VStack {
             ZStack {
-                ForEach(cards) {
-                    PlayingCardView(playingCard: $0, isFaceDown: true)
-                        .offset(y: CGFloat((cards.firstIndex(of: $0) ?? 0) * 1))
+                ForEach(cards) { card in
+                    PlayingCardView(playingCard: card, isFaceDown: true)
+                        .offset(y: CGFloat((cards.firstIndex(of: card) ?? 0) * 1))
+                        .matchedGeometryEffect(id: card.id, in: namespace)
                 }
             }
             .shadow(radius: 2)
@@ -37,9 +42,3 @@ struct CardStackView: View {
     }
     
 }
-
-//struct CardStackView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CardStackView()
-//    }
-//}

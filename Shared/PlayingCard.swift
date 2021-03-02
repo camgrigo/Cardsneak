@@ -17,6 +17,10 @@ struct PlayingCard: Equatable, Hashable, Identifiable {
 
 extension PlayingCard {
     
+    static var suitCount: Int { Suit.allCases.count }
+    
+    static var rankCount: Int { Rank.allCases.count }
+    
     enum Suit: CaseIterable, CustomStringConvertible {
         case spade, diamond, club, heart
         

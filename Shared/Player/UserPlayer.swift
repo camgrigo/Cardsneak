@@ -13,7 +13,7 @@ class UserPlayer: Player, ObservableObject {
     
     let id: Int
     
-    var cards = [PlayingCard]()
+    @Published var cards = CardStack()
     
     @Published var canChallenge = false
     

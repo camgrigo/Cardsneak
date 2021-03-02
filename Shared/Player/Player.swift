@@ -11,7 +11,7 @@ protocol Player {
     
     var name: String { get }
     var id: Int { get }
-    var cards: [PlayingCard] { get set }
+    var cards: CardStack { get set }
     
     
     mutating func accept(_ cards: PlayingCard...)
@@ -25,11 +25,11 @@ protocol Player {
 extension Player {
     
     mutating func accept(_ cards: [PlayingCard]) {
-        self.cards.append(contentsOf: cards)
+        self.cards.push(cards)
     }
     
     mutating func accept(_ cards: PlayingCard...) {
-        self.cards.append(contentsOf: cards)
+        self.cards.push(cards)
     }
     
 }

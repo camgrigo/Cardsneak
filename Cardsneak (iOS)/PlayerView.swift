@@ -7,64 +7,75 @@
 
 import SwiftUI
 
+struct CardList: View {
+    
+    let stack: CardStack
+    
+    var namespace: Namespace.ID
+    
+    let onSelect: (PlayingCard.ID) -> Void
+    
+    var body: some View {
+        ScrollView(.horizontal) {
+            LazyHStack {
+                ForEach(stack) { card in
+                    PlayingCardView(playingCard: card)
+                        .matchedGeometryEffect(id: card.id, in: namespace)
+                        .onTapGesture { onSelect(card.id) }
+                }
+            }
+            .padding()
+        }
+    }
+    
+}
+
 struct PlayerView: View {
+    
+    @Namespace var namespace
     
     @ObservedObject var userPlayer: UserPlayer
     
     @ObservedObject var gameModel: GameModel
     
-    @State private var selectedCards = [PlayingCard]()
+    @State private var selectedCards = CardStack()
     
     let submitCards: ([PlayingCard]) -> Void
     
+    
     var body: some View {
         VStack {
-            ScrollView(.horizontal) {
-                LazyHStack {
-                    ForEach(selectedCards) { card in
-                        PlayingCardView(playingCard: card)
-                            .padding(4)
-                            .background(Color.blue.cornerRadius(16))
-                            .onTapGesture {
-                                let index = selectedCards.firstIndex(of: card)!
-                                selectedCards.remove(at: index)
-                            }
-                    }
-                }
-                .padding()
-            }
-            
-            ScrollView(.horizontal) {
-                LazyHStack {
-                    ForEach(userPlayer.cards.filter { !selectedCards.contains($0) }) { card in
-                        if userPlayer.state == .selectingCards {
-                            PlayingCardView(playingCard: card)
-                                .onTapGesture {
-                                    if selectedCards.count < PlayingCard.Suit.allCases.count {
-                                        selectedCards.append(card)
-                                    }
-                                }
-                            
-                        } else {
-                            PlayingCardView(playingCard: card)
-                        }
-                    }
-                }
-                .padding()
-            }
-            
             if userPlayer.state == .selectingCards {
-                Button("Play") {
-                    submitCards(selectedCards)
-                    selectedCards.removeAll()
+                HStack {
+                    CardList(stack: selectedCards, namespace: namespace) {
+                        userPlayer.cards.push(selectedCards.pop(id: $0)!)
+                    }
+                    Button {
+                        precondition(Set(selectedCards).isDisjoint(with: userPlayer.cards))
+                        submitCards(selectedCards.empty())
+                    } label: {
+                        Image(systemName: "arrow.up.circle.fill").font(.largeTitle)
+                            .foregroundColor(.blue)
+                    }
+                    .disabled(selectedCards.isEmpty)
                 }
-                .disabled(selectedCards.count < 1)
+                .background(Color(.secondarySystemBackground))
+                .scaleEffect()
             }
-            
-            
-            if userPlayer.canChallenge {
-                Button("Challenge", action: challenge)
+            CardList(stack: userPlayer.cards, namespace: namespace) {
+                guard userPlayer.state == .selectingCards &&
+                      selectedCards.count < PlayingCard.suitCount else { return }
+                
+                selectedCards.push(userPlayer.cards.pop(id: $0)!)
             }
+            .background(Color(.tertiarySystemBackground))
+            HStack {
+                if userPlayer.canChallenge {
+                    RoundedButton("Challenge", action: challenge)
+                }
+            }
+            .padding()
+            .background(Color(.tertiarySystemBackground))
         }
         .padding(.vertical)
     }

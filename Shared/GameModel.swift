@@ -13,18 +13,13 @@ class GameModel: ObservableObject {
     
     @Published var turnCarousel = Carousel<Int>()
     
-    var rankCarousel = Carousel(PlayingCard.Rank.allCases)
-    var turns = [Turn]()
-    var stack: [PlayingCard] {
-        turns.reduce([]) {
-            var a = $0
-            a.append(contentsOf: $1.cards)
-            return a
-        }
-    }
+    @Published var rankCarousel = Carousel(PlayingCard.Rank.allCases)
+    
+    @Published var turns = [Turn]()
+    var stack: [PlayingCard] { turns.reduce([]) { $0 + $1.cards } }
     
     
-    @Published var userPlayer = UserPlayer(name: "", id: 0)
+    @Published var userPlayer = UserPlayer(name: "Cameron", id: 0)
     
     @Published var players = [Player]()
     
@@ -58,16 +53,12 @@ class GameModel: ObservableObject {
         state = .deal
         print("Dealing cards…")
         
-        var cards = Deck().shuffled().cards
+        CardStack
+            .standardDeck()
+            .shuffle()
+            .deal(to: &players)
         
-        print("Created deck with \(cards.count) cards.")
-        
-        while !cards.isEmpty {
-            let card = cards.popLast()!
-            
-            players[turnCarousel.next()].accept(card)
-        }
-        
+        print("Players:", players.reduce([]) { $0 + $1.cards }.count, " Stack:", stack.count)
         print(players.map { "Player \($0.id) Card Count: \($0.cards.count)" })
     }
     
@@ -91,6 +82,9 @@ class GameModel: ObservableObject {
     }
     
     func receivePlay(cards: [PlayingCard]) {
+        print("Cards:", cards.count)
+        print("Players:", players.reduce([]) { $0 + $1.cards }.count, " Stack:", stack.count)
+        
         state = .discard
         print("Discarding…")
         
@@ -126,16 +120,15 @@ class GameModel: ObservableObject {
                 }
             }
         
-        precondition(
-            players.reduce([]) { $0 + $1.cards }.count + stack.count ==
-                PlayingCard.Rank.allCases.count * PlayingCard.Suit.allCases.count
-        )
+        print("Players:", players.reduce([]) { $0 + $1.cards }.count, " Stack:", stack.count)
         
-        if allHaveCards {
-            startTurn()
-            
-        } else {
-            endGame()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            if self.allHaveCards {
+                self.startTurn()
+                
+            } else {
+                self.endGame()
+            }
         }
     }
     
@@ -161,11 +154,11 @@ class GameModel: ObservableObject {
         let recipientId = lastTurn.isCheat ? lastTurn.playerId : playerId
         
         let recipientIndex = players.firstIndex { $0.id == recipientId }!
-        let cards = turns.reduce([]) { $0 + $1.cards }
+        let cards = stack
         
         players[recipientIndex].accept(cards)
         
-        turns.removeAll(keepingCapacity: true)
+        turns.removeAll()
         
         print("Player \(players[recipientIndex].name) gets \(cards.count) card(s).")
     }
